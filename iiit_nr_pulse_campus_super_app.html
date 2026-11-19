@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IIIT-NR Pulse | Dr. SPM IIIT Naya Raipur Super App</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#1e1b4b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbars & Glassmorphism */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.4);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.7);
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.72);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    html:not(.dark) .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+    }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(0.96); }
+    }
+    .animate-pulse-soft {
+      animation: pulse-soft 2.2s infinite ease-in-out;
+    }
+    .ypt-glow {
+      box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 dark:bg-slate-950 dark:text-slate-100 light:bg-slate-50 light:text-slate-900 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen flex flex-col lg:flex-row overflow-x-hidden transition-colors duration-200">
+
+  <!-- ======================= SIDEBAR NAVIGATION (DESKTOP) ======================= -->
+  <aside class="hidden lg:flex flex-col w-72 bg-slate-900/90 dark:bg-slate-900/90 border-r border-slate-800/80 shrink-0 sticky top-0 h-screen z-30 select-none">
+    <!-- Brand Header -->
+    <div class="p-5 border-b border-slate-800/80 flex items-center gap-3.5">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-indigo-500/25 shrink-0">
+        <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-indigo-200 to-emerald-300 bg-clip-text text-transparent">IIIT-NR Pulse</h1>
+          <span class="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">2026-27</span>
+        </div>
+        <p class="text-xs text-slate-400 truncate">Dr. SPM IIIT Naya Raipur</p>
+      </div>
+    </div>
+
+    <!-- Branch Selector Box -->
+    <div class="p-4 border-b border-slate-800/80 bg-slate-950/40 space-y-3">
+      <!-- Logged-in Student Mini Card -->
+      <div onclick="openStudentLoginModal()" class="cursor-pointer p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800/90 border border-indigo-500/30 flex items-center justify-between gap-2 transition group">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div id="sidebarUserAvatar" class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-emerald-500 text-white font-extrabold text-xs flex items-center justify-center shrink-0">
+            ST
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <p id="sidebarUserName" class="text-xs font-bold text-white truncate">Student Login</p>
+              <span id="cloudSyncDot" class="w-2 h-2 rounded-full bg-emerald-400" title="Firebase Cloud Synced"></span>
+            </div>
+            <p id="sidebarUserMeta" class="text-[10px] font-mono text-slate-400 truncate">Tap to set Roll No & Branch</p>
+          </div>
+        </div>
+        <i class="fa-solid fa-pen-to-square text-xs text-slate-400 group-hover:text-indigo-400 shrink-0"></i>
+      </div>
+
+      <div>
+        <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+          <i class="fa-solid fa-code-branch mr-1 text-indigo-400"></i> Your Branch & Batch
+        </label>
+        <select id="branchSelectorDesktop" onchange="changeBranch(this.value)" class="w-full bg-slate-800/90 text-slate-100 text-xs font-semibold rounded-xl px-3 py-2.5 border border-slate-700 focus:outline-none focus:border-indigo-500 transition">
+          <option value="DSAI">B.Tech DSAI (Sem I • Room 135)</option>
+          <option value="CSE">B.Tech CSE (Sem I • Room 133)</option>
+          <option value="ECE">B.Tech ECE (Sem I • Room 134)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Navigation Links -->
+    <nav class="flex-1 overflow-y-auto p-3 space-y-1" id="desktopNav">
+      <button onclick="switchTab('dashboard')" data-tab="dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
+        <i class="fa-solid fa-table-columns w-5 text-center"></i>
+        <span>All-in-One Dashboard</span>
+      </button>
+      <button onclick="switchTab('schedule')" data-tab="schedule" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-calendar-week w-5 text-center text-indigo-400"></i>
+          <span>Timetable & Faculty</span>
+        </div>
+        <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full">Rm 135</span>
+      </button>
+      <button onclick="switchTab('study')" data-tab="study" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-fire-flame-curved w-5 text-center text-emerald-400"></i>
+          <span>YPT Study & Pomodoro</span>
+        </div>
+        <span id="sidebarYptBadge" class="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">00:00:00</span>
+      </button>
+      <button onclick="switchTab('mess')" data-tab="mess" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-utensils w-5 text-center text-amber-400"></i>
+          <span>Mess & Canteen Menu</span>
+        </div>
+        <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full">Rates</span>
+      </button>
+      <button onclick="switchTab('facilities')" data-tab="facilities" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-store w-5 text-center text-cyan-400"></i>
+          <span>B-Mart, Library & Sports</span>
+        </div>
+        <span id="sidebarOpenCount" class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">Live</span>
+      </button>
+      <button onclick="switchTab('bus')" data-tab="bus" class="nav-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <i class="fa-solid fa-bus w-5 text-center text-rose-400"></i>
+        <span>Bus Stand & Shuttle</span>
+      </button>
+      <button onclick="switchTab('calendar')" data-tab="calendar" class="nav-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <i class="fa-solid fa-calendar-check w-5 text-center text-purple-400"></i>
+        <span>Academic Calendar</span>
+      </button>
+      <button onclick="switchTab('directory')" data-tab="directory" class="nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-building-user w-5 text-center text-teal-400"></i>
+          <span>Hostel & Batch Finder</span>
+        </div>
+        <span class="text-[10px] bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded-full">Raman</span>
+      </button>
+    </nav>
+
+    <!-- Live Campus Mini Status Footer -->
+    <div class="p-4 border-t border-slate-800/80 bg-slate-950/60 space-y-2">
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-slate-400 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          Campus Clock
+        </span>
+        <span id="sidebarClock" class="font-mono font-semibold text-slate-200">--:--:--</span>
+      </div>
+      <div class="text-[11px] text-slate-400 flex items-center justify-between">
+        <span>Sector-24, Naya Raipur</span>
+        <span class="text-indigo-400 font-medium">Autumn 2026</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ======================= MAIN CONTENT AREA ======================= -->
+  <div class="flex-1 flex flex-col min-w-0 pb-20 lg:pb-6">
+
+    <!-- TOP STICKY HEADER -->
+    <header class="sticky top-0 z-20 bg-slate-900/85 backdrop-blur-md border-b border-slate-800/80 px-4 lg:px-8 py-3">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        <!-- Mobile Logo & Branch Switcher -->
+        <div class="flex items-center gap-3">
+          <div class="lg:hidden w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-400 flex items-center justify-center shadow">
+            <i class="fa-solid fa-graduation-cap text-white text-sm"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 id="pageHeaderTitle" class="text-base sm:text-lg font-bold tracking-tight text-white">Campus Command Center</h2>
+              <span id="activeBranchBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">DSAI • Rm 135</span>
+            </div>
+            <p id="currentDateDisplay" class="text-xs text-slate-400">Loading date...</p>
+          </div>
+        </div>
+
+        <!-- Live Next Class Pill + Actions -->
+        <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+          <!-- Mobile Branch Switch -->
+          <select id="branchSelectorMobile" onchange="changeBranch(this.value)" class="lg:hidden bg-slate-800 text-slate-100 text-xs font-semibold rounded-lg px-2.5 py-1.5 border border-slate-700">
+            <option value="DSAI">DSAI</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+          </select>
+
+          <!-- Live Class Alert Pill -->
+          <div onclick="switchTab('dashboard')" class="cursor-pointer hidden sm:flex items-center gap-2.5 bg-slate-800/90 hover:bg-slate-800 border border-slate-700/80 px-3.5 py-1.5 rounded-xl transition">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div class="text-xs">
+              <span class="text-slate-400 mr-1" id="topClassStatusLabel">Now/Next:</span>
+              <span class="font-semibold text-white" id="topClassName">Checking schedule...</span>
+            </div>
+          </div>
+
+          <!-- Student Profile & Firebase Cloud Login Button -->
+          <button onclick="openStudentLoginModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 border border-indigo-500/40 text-xs transition" title="Student Login & Cloud Sync Profile">
+            <span id="headerCloudBadge" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span id="headerStudentName" class="font-bold text-white max-w-[120px] truncate">Student Login</span>
+            <span id="headerStudentBranch" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300">DSAI</span>
+          </button>
+
+          <!-- Notification Bell -->
+          <button onclick="toggleNotificationDrawer()" class="relative p-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/80 text-slate-200 border border-slate-700/80 transition" title="Campus Notifications & Reminders">
+            <i class="fa-solid fa-bell"></i>
+            <span id="notifBadgeCount" class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center">4</span>
+          </button>
+
+          <!-- Quick Add Custom Reminder Button -->
+          <button onclick="openReminderModal()" class="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/20 transition">
+            <i class="fa-solid fa-plus"></i>
+            <span>Alert / Task</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Academic Calendar Active Banner -->
+      <div class="max-w-7xl mx-auto mt-2.5 pt-2 border-t border-slate-800/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2 text-amber-300 overflow-x-auto whitespace-nowrap">
+          <span class="px-2 py-0.5 rounded bg-amber-500/20 border border-amber-500/30 font-bold text-[10px] uppercase tracking-wider shrink-0">
+            <i class="fa-solid fa-bullhorn mr-1"></i>Academic Alert
+          </span>
+          <span id="academicBannerText" class="font-medium">Mid Term Examinations (MTE): Oct 26 – Nov 03, 2026 • Upcoming Holiday: Diwali (Nov 08) & Govardhan Puja (Nov 09)</span>
+        </div>
+        <button onclick="switchTab('calendar')" class="text-indigo-400 hover:text-indigo-300 font-semibold shrink-0 ml-auto">
+          Full Calendar <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
+
+      <!-- ===================================================================== -->
+      <!-- TAB 1: ALL-IN-ONE DASHBOARD                                           -->
+      <!-- ===================================================================== -->
+      <section id="tab-dashboard" class="tab-section space-y-6">
+        
+        <!-- Top Hero Row: Live Class Now (with Mark Present button) + YPT Quick Timer + Today's Mess -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          
+          <!-- Card 1: Live / Ongoing Class Radar + One-Click "Mark Present" -->
+          <div class="glass-card rounded-2xl p-5 relative overflow-hidden border border-indigo-500/40 flex flex-col justify-between">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none"></div>
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+                  <i class="fa-solid fa-satellite-dish animate-pulse"></i> Current Ongoing Class
+                </span>
+                <div class="flex items-center gap-1.5">
+                  <select id="liveSlotSimulator" onchange="handleSimulateSlotChange(this.value)" class="bg-slate-900/90 text-[10px] font-mono text-slate-300 rounded-lg px-2 py-1 border border-slate-700 focus:outline-none focus:border-indigo-500" title="Simulate class slot to test marking attendance anytime">
+                    <option value="AUTO">Live Clock</option>
+                    <option value="0">09:00-09:55</option>
+                    <option value="1">10:00-10:55</option>
+                    <option value="2">11:00-11:55</option>
+                    <option value="3">12:00-12:55</option>
+                    <option value="4">02:00-02:55</option>
+                    <option value="5">03:00-03:55</option>
+                    <option value="6">04:00-04:55</option>
+                    <option value="7">05:00-05:55</option>
+                  </select>
+                  <span id="dashRoomBadge" class="text-[11px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Rm 135</span>
+                </div>
+              </div>
+              <div id="dashCurrentClassBox" class="space-y-2.5">
+                <!-- Populated by JS with "Mark Present" Button right beside the ongoing class -->
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-slate-400 truncate pr-2" id="dashNextClassSub">Next slot loading...</span>
+              <button onclick="switchTab('study'); switchStudySubTab('attendance');" class="text-emerald-400 hover:text-emerald-300 font-semibold shrink-0">
+                Attendance Log <i class="fa-solid fa-chevron-right text-[10px] ml-0.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: YPT Daily Study Pulse -->
+          <div class="glass-card rounded-2xl p-5 relative overflow-hidden border border-emerald-500/30">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/15 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-fire-flame-curved"></i> YPT Study Tracker
+              </span>
+              <span id="dashYptStatusBadge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Paused</span>
+            </div>
+            <div class="flex items-baseline justify-between my-2">
+              <div>
+                <div id="dashYptTotalDisplay" class="text-3xl sm:text-4xl font-mono font-extrabold text-white tracking-tight">00:00:00</div>
+                <p class="text-xs text-slate-400 mt-0.5">Daily Target: <span id="dashYptGoalText" class="text-emerald-300 font-semibold">06:00:00</span></p>
+              </div>
+              <button onclick="quickToggleYptFromDash()" id="dashYptPlayBtn" class="w-12 h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 flex items-center justify-center text-lg font-bold shadow-lg shadow-emerald-500/25 transition">
+                <i class="fa-solid fa-play"></i>
+              </button>
+            </div>
+            <!-- Progress bar -->
+            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden mt-3">
+              <div id="dashYptProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-300 transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="mt-3 flex items-center justify-between text-xs text-slate-400">
+              <span id="dashActiveSubjectLabel">Active: Programming with C</span>
+              <button onclick="switchTab('study')" class="text-emerald-400 hover:text-emerald-300 font-semibold">
+                Study Room <i class="fa-solid fa-chevron-right text-[10px] ml-0.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: Live Mess Meal Right Now -->
+          <div class="glass-card rounded-2xl p-5 relative overflow-hidden border border-amber-500/30">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-amber-500/15 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-bowl-food"></i> Mess Meal Radar
+              </span>
+              <span id="dashMessDayBadge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Today</span>
+            </div>
+            <div id="dashMessCurrentBox" class="space-y-1.5 my-2">
+              <!-- Populated by JS -->
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-slate-400">Gulab Jamun @ Canteen: <b class="text-amber-300">₹10/pc</b></span>
+              <button onclick="switchTab('mess')" class="text-amber-400 hover:text-amber-300 font-semibold">
+                Full Menu <i class="fa-solid fa-chevron-right text-[10px] ml-0.5"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LIVE CAMPUS FACILITIES STATUS BAR (IS IT OPEN OR CLOSED RIGHT NOW?) -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-bolt text-cyan-400"></i>
+                Live Campus Facilities & Outlets — Open or Closed?
+              </h3>
+              <p class="text-xs text-slate-400">Auto-updated in real time based on IIIT Naya Raipur official timings</p>
+            </div>
+            <button onclick="switchTab('facilities')" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition">
+              Detailed Timings & Rules <i class="fa-solid fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+
+          <div id="dashFacilitiesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- MIDDLE ROW: TODAY'S FULL SCHEDULE + QUICK TO-DO & NEXT BUS -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left 7 Cols: Today's Classes Timeline -->
+          <div class="lg:col-span-7 glass-card rounded-2xl p-5 flex flex-col">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-clock text-indigo-400"></i>
+                  Today's Class & Lab Schedule
+                </h3>
+                <p class="text-xs text-slate-400" id="dashScheduleSubtitle">Showing classes for selected day</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <select id="dashDayQuickSelect" onchange="renderDashboardSchedule(this.value)" class="bg-slate-800 text-xs text-slate-200 font-semibold rounded-lg px-2.5 py-1.5 border border-slate-700">
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="dashTodayTimeline" class="space-y-2.5 flex-1">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Right 5 Cols: Subject Attendance Summary + Quick Tasks + Next BRTS Bus -->
+          <div class="lg:col-span-5 space-y-6">
+
+            <!-- Subject-Wise Attendance Quick Overview Card (Synced with Mark Present) -->
+            <div class="glass-card rounded-2xl p-5 border border-emerald-500/30">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-user-check text-emerald-400"></i>
+                    My Subject Attendance Record
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Days attended per subject • Cloud synced</p>
+                </div>
+                <button onclick="switchTab('study'); switchStudySubTab('attendance');" class="text-xs text-emerald-400 hover:underline font-semibold">Full History</button>
+              </div>
+              <div id="dashAttendanceMiniList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+            
+            <!-- Quick To-Do & Assignments -->
+            <div class="glass-card rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-list-check text-emerald-400"></i>
+                  Priority Tasks & Labs
+                </h3>
+                <button onclick="switchTab('study')" class="text-xs text-emerald-400 hover:underline font-medium">Manage All</button>
+              </div>
+              <!-- Quick Add Task Input -->
+              <form onsubmit="handleQuickAddTask(event)" class="flex gap-2 mb-3">
+                <input type="text" id="dashQuickTaskInput" placeholder="Add assignment, lab record, quiz..." required class="flex-1 bg-slate-900/90 text-xs text-white rounded-xl px-3 py-2 border border-slate-700/80 focus:outline-none focus:border-emerald-500" />
+                <button type="submit" class="px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">Add</button>
+              </form>
+              <div id="dashTodoList" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Next Bus from IIIT-NR Gate -->
+            <div class="glass-card rounded-2xl p-5 border border-rose-500/20">
+              <div class="flex items-center justify-between mb-3">
+                <div>
+                  <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-bus-simple text-rose-400"></i>
+                    Next Bus @ IIIT-NR Gate
+                  </h3>
+                  <p class="text-xs text-slate-400">Naya Raipur BRTS & Campus Shuttle</p>
+                </div>
+                <button onclick="switchTab('bus')" class="text-xs text-rose-400 hover:underline font-semibold">All Routes</button>
+              </div>
+              <div id="dashNextBusBox" class="space-y-2.5">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 2: CLASS SCHEDULE, LABS & FACULTY DIRECTORY                       -->
+      <!-- ===================================================================== -->
+      <section id="tab-schedule" class="tab-section hidden space-y-6">
+        <!-- Header & Controls -->
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2.5">
+              <h2 class="text-xl font-extrabold text-white">Official Class & Lab Timetable</h2>
+              <span id="scheduleBranchPill" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">B.Tech I Sem DSAI • Room 135</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">Dr. SPM IIIT Naya Raipur • Autumn Semester 2026-27 (w.e.f. 24/08/2026)</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="inline-flex rounded-xl bg-slate-900 p-1 border border-slate-800">
+              <button onclick="changeBranch('DSAI')" class="branch-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition" data-branch="DSAI">DSAI (Rm 135)</button>
+              <button onclick="changeBranch('CSE')" class="branch-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition" data-branch="CSE">CSE (Rm 133)</button>
+              <button onclick="changeBranch('ECE')" class="branch-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold transition" data-branch="ECE">ECE (Rm 134)</button>
+            </div>
+            <button onclick="openCustomSlotModal()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-indigo-600/20 transition">
+              <i class="fa-solid fa-plus"></i> Custom Extra Class/Lab
+            </button>
+          </div>
+        </div>
+
+        <!-- Day Filter Pills for Mobile / Quick View -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1">
+          <button onclick="filterTimetableDay('ALL')" data-dayfilter="ALL" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shrink-0">Full Week Grid</button>
+          <button onclick="filterTimetableDay('Monday')" data-dayfilter="Monday" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0">Monday</button>
+          <button onclick="filterTimetableDay('Tuesday')" data-dayfilter="Tuesday" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0">Tuesday</button>
+          <button onclick="filterTimetableDay('Wednesday')" data-dayfilter="Wednesday" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0">Wednesday</button>
+          <button onclick="filterTimetableDay('Thursday')" data-dayfilter="Thursday" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0">Thursday</button>
+          <button onclick="filterTimetableDay('Friday')" data-dayfilter="Friday" class="tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0">Friday</button>
+        </div>
+
+        <!-- Full Timetable Grid -->
+        <div class="glass-card rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[920px]">
+              <thead>
+                <tr class="bg-slate-900/95 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  <th class="py-3.5 px-4 sticky left-0 bg-slate-900 z-10 w-28">Day / Time</th>
+                  <th class="py-3.5 px-3">09:00 - 09:55</th>
+                  <th class="py-3.5 px-3">10:00 - 10:55</th>
+                  <th class="py-3.5 px-3">11:00 - 11:55</th>
+                  <th class="py-3.5 px-3">12:00 - 12:55</th>
+                  <th class="py-3.5 px-2 text-center bg-amber-500/10 text-amber-300 w-16">01:00 - 02:00</th>
+                  <th class="py-3.5 px-3">02:00 - 02:55</th>
+                  <th class="py-3.5 px-3">03:00 - 03:55</th>
+                  <th class="py-3.5 px-3">04:00 - 04:55</th>
+                  <th class="py-3.5 px-3">05:00 - 05:55</th>
+                </tr>
+              </thead>
+              <tbody id="timetableGridBody" class="divide-y divide-slate-800/70 text-xs">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Faculty & Course Slot Directory -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-chalkboard-user text-indigo-400"></i>
+                Course Slots, Labs & Faculty Directory
+              </h3>
+              <p class="text-xs text-slate-400">Official Autumn 2026-27 Faculty Mapping & Classroom / Lab Venues</p>
+            </div>
+          </div>
+
+          <div id="facultyDirectoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: YPT STUDY TRACKER, POMODORO, TO-DO & 75% ATTENDANCE            -->
+      <!-- ===================================================================== -->
+      <section id="tab-study" class="tab-section hidden space-y-6">
+        
+        <!-- Study Sub-navigation -->
+        <div class="flex flex-wrap items-center justify-between gap-3 glass-card rounded-2xl p-4">
+          <div class="flex items-center gap-2">
+            <span class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
+              <i class="fa-solid fa-fire-flame-curved"></i>
+            </span>
+            <div>
+              <h2 class="text-lg font-extrabold text-white">YPT Focus Hub & Academic Tools</h2>
+              <p class="text-xs text-slate-400">Yeolpumta-style Subject Stopwatch • Pomodoro • 75% Attendance Guard</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
+            <button onclick="switchStudySubTab('ypt')" id="subtab-btn-ypt" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition">YPT Study Tracker</button>
+            <button onclick="switchStudySubTab('pomodoro')" id="subtab-btn-pomodoro" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 transition">Pomodoro Timer</button>
+            <button onclick="switchStudySubTab('attendance')" id="subtab-btn-attendance" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 transition">75% Attendance</button>
+            <button onclick="switchStudySubTab('todo')" id="subtab-btn-todo" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 transition">Tasks & Labs</button>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL A: YPT DAILY TRACKER & LIVE STUDY GROUP -->
+        <div id="study-sub-ypt" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left 7 Cols: Big YPT Stopwatch & Subject Timers -->
+          <div class="lg:col-span-7 space-y-5">
+            <!-- Master YPT Display Card -->
+            <div class="glass-card rounded-3xl p-6 text-center relative overflow-hidden border border-emerald-500/30 ypt-glow">
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 font-semibold border border-emerald-500/30">
+                  <i class="fa-solid fa-fire mr-1"></i>Streak: <b id="yptStreakDays">5 Days</b>
+                </span>
+                <button onclick="resetYptToday()" class="text-slate-400 hover:text-rose-400 transition">
+                  <i class="fa-solid fa-rotate-left mr-1"></i>Reset Today
+                </button>
+              </div>
+
+              <p class="text-xs uppercase tracking-widest text-emerald-400 font-bold mt-2" id="yptActiveCourseBanner">Ready to Focus</p>
+              <div id="yptMasterClock" class="text-5xl sm:text-6xl font-mono font-extrabold text-white tracking-wider my-4">00:00:00</div>
+
+              <div class="max-w-md mx-auto">
+                <div class="flex justify-between text-xs text-slate-400 mb-1.5">
+                  <span>Daily Progress</span>
+                  <span id="yptMasterPercent">0% of 6h goal</span>
+                </div>
+                <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden">
+                  <div id="yptMasterBar" class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                <button onclick="toggleMasterYpt()" id="yptMasterToggleBtn" class="px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition">
+                  <i class="fa-solid fa-play"></i>
+                  <span>Start Studying</span>
+                </button>
+                <button onclick="logManualStudyTime()" class="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition">
+                  <i class="fa-solid fa-plus mr-1"></i> +30m Offline Study
+                </button>
+              </div>
+            </div>
+
+            <!-- Subject-wise Play/Pause List -->
+            <div class="glass-card rounded-2xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-base font-bold text-white">Subject-Wise Study Timers</h3>
+                  <p class="text-xs text-slate-400">Tap play on any subject to track time like Yeolpumta (YPT)</p>
+                </div>
+                <button onclick="addCustomYptSubject()" class="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">
+                  + Add Subject
+                </button>
+              </div>
+              <div id="yptSubjectsList" class="space-y-2.5">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 5 Cols: IIIT-NR Live Study Room Leaderboard -->
+          <div class="lg:col-span-5 space-y-5">
+            <div class="glass-card rounded-2xl p-5 border border-indigo-500/25">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    IIIT-NR Live Study Room
+                  </h3>
+                  <p class="text-xs text-slate-400">Batch 2026-30 MTE Prep Group • Ranked by Today's Focus</p>
+                </div>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30" id="liveStudyingCountBadge">6 Active</span>
+              </div>
+
+              <div id="yptLeaderboardList" class="space-y-2.5">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Study Insights Card -->
+            <div class="glass-card rounded-2xl p-5">
+              <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-lightbulb text-amber-400"></i> Exam Prep Tip (MTE Oct 26–Nov 3)
+              </h4>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Your study sessions are automatically saved to your browser. Switch between <b>Linear Algebra (Slot F)</b>, <b>Calculus (Slot N)</b>, and <b>Programming with C (Slot M)</b> to balance theory and coding practice.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SUB-PANEL B: POMODORO FOCUS TIMER -->
+        <div id="study-sub-pomodoro" class="hidden">
+          <div class="max-w-xl mx-auto glass-card rounded-3xl p-8 text-center space-y-6 border border-indigo-500/30">
+            <div class="inline-flex p-1 rounded-2xl bg-slate-900 border border-slate-800">
+              <button onclick="setPomodoroMode('focus', 25)" id="pomo-mode-focus" class="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white">Focus (25m)</button>
+              <button onclick="setPomodoroMode('short', 5)" id="pomo-mode-short" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Short Break (5m)</button>
+              <button onclick="setPomodoroMode('long', 15)" id="pomo-mode-long" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Long Break (15m)</button>
+              <button onclick="setPomodoroMode('deep', 50)" id="pomo-mode-deep" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white">Deep Lab (50m)</button>
+            </div>
+
+            <div class="py-4">
+              <div id="pomodoroTimeDisplay" class="text-6xl sm:text-7xl font-mono font-extrabold text-white tracking-wider">25:00</div>
+              <p id="pomodoroStatusText" class="text-xs text-indigo-300 mt-2 font-medium uppercase tracking-widest">Focus Session — Auto-credits YPT Study Time</p>
+            </div>
+
+            <div class="flex items-center justify-center gap-4">
+              <button onclick="togglePomodoro()" id="pomodoroStartBtn" class="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition">
+                <i class="fa-solid fa-play mr-1.5"></i> Start Timer
+              </button>
+              <button onclick="resetPomodoro()" class="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm border border-slate-700 transition">
+                <i class="fa-solid fa-rotate-right mr-1"></i> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL C: 75% ATTENDANCE CALCULATOR & GUARD -->
+        <div id="study-sub-attendance" class="hidden space-y-5">
+          <div class="glass-card rounded-2xl p-5 border border-amber-500/30 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-user-check text-amber-400"></i>
+                  IIIT-NR 75% Subject-Wise Attendance & Cloud History
+                </h3>
+                <span id="attCloudBadge" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Synced</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5">Short-attendance list is communicated on <b class="text-amber-300">December 15, 2026</b> (Total 71 Teaching Days in Sem-I).</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="resetAttendanceDemo()" class="text-xs px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+                Reset Counts
+              </button>
+            </div>
+          </div>
+
+          <div id="attendanceCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Recorded Attendance History Table -->
+          <div class="glass-card rounded-2xl p-5 border border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-clock-rotate-left text-indigo-400"></i>
+                  Recent "Mark Present" Cloud Attendance Log
+                </h4>
+                <p class="text-xs text-slate-400">Every class where you clicked "Mark Present" is timestamped & stored in your student account</p>
+              </div>
+            </div>
+            <div id="attendanceHistoryLogList" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-PANEL D: FULL TO-DO & ASSIGNMENT MANAGER -->
+        <div id="study-sub-todo" class="hidden space-y-5">
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="text-base font-bold text-white mb-3">Add New Assignment / Quiz / Lab Submission</h3>
+            <form onsubmit="handleFullAddTask(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+              <input type="text" id="fullTaskTitle" placeholder="Task title (e.g., Verilog Lab 4 Report, Calculus Assignment 2)" required class="sm:col-span-5 bg-slate-900 text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700" />
+              <select id="fullTaskCourse" class="sm:col-span-3 bg-slate-900 text-xs text-slate-200 rounded-xl px-3 py-2.5 border border-slate-700">
+                <option value="Linear Algebra (F)">Linear Algebra (Slot F)</option>
+                <option value="Calculus (N)">Calculus (Slot N)</option>
+                <option value="Prog with C (M)">Prog with C (Slot M)</option>
+                <option value="Digital Elec (B)">Digital Elec (Slot B)</option>
+                <option value="IoT (C)">Internet of Things (Slot C)</option>
+                <option value="ILC / Entrep">ILC / Entrepreneurship</option>
+                <option value="General">General / Hostel</option>
+              </select>
+              <select id="fullTaskPriority" class="sm:col-span-2 bg-slate-900 text-xs text-slate-200 rounded-xl px-3 py-2.5 border border-slate-700">
+                <option value="High">High Priority</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              <button type="submit" class="sm:col-span-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl py-2.5 transition">
+                + Add Task
+              </button>
+            </form>
+          </div>
+
+          <div id="fullTodoContainer" class="space-y-2.5">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 4: MESS MENU & CANTEEN RATE CHART + BILL SPLITTER                 -->
+      <!-- ===================================================================== -->
+      <section id="tab-mess" class="tab-section hidden space-y-6">
+        
+        <!-- Sub-navigation between Mess Menu and Canteen Rate Chart -->
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-utensils text-amber-400"></i>
+              Student Mess & Campus Canteen Hub
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Official Aug–Dec 2026 Mess Menu & Fixed Rate Canteen Menu with Order Calculator</p>
+          </div>
+          <div class="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800">
+            <button onclick="switchFoodSubTab('messmenu')" id="food-btn-messmenu" class="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition">
+              <i class="fa-solid fa-calendar-days mr-1"></i> Weekly Mess Menu
+            </button>
+            <button onclick="switchFoodSubTab('canteen')" id="food-btn-canteen" class="px-4 py-2 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition">
+              <i class="fa-solid fa-mug-hot mr-1"></i> Canteen Rate Chart & Calculator
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 1: OFFICIAL MESS MENU -->
+        <div id="food-sub-messmenu" class="space-y-5">
+          <!-- Day Selector Bar -->
+          <div class="flex items-center gap-2 overflow-x-auto pb-1" id="messDayPills">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- 4 Meal Cards for Selected Day -->
+          <div id="messDayMealsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Mess Timings Info Banner -->
+          <div class="glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-clock text-amber-400"></i>
+              <span><b>Mess Timings:</b> Breakfast: 7:30–9:00 AM • Lunch: 12:30–2:15 PM • High Tea: 5:00–6:00 PM • Dinner: 7:30–9:15 PM</span>
+            </div>
+            <span class="text-emerald-400 font-semibold">Includes Daily Boiled Eggs (2 Pcs) / Oats 42g & Sprouts</span>
+          </div>
+        </div>
+
+        <!-- SUB-VIEW 2: CANTEEN RATE CHART & ORDER / SPLIT CALCULATOR -->
+        <div id="food-sub-canteen" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left 8 Cols: Search & Category Filter + Canteen Menu Items -->
+          <div class="lg:col-span-8 space-y-4">
+            <!-- Special Handwritten Gulab Jamun Highlight Banner (from photo!) -->
+            <div class="rounded-2xl p-4 bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-rose-500/20 border border-amber-500/40 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-extrabold text-lg">
+                  <i class="fa-solid fa-cookie-bite"></i>
+                </div>
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500 text-slate-950">Counter Special Note</span>
+                  <h4 class="text-base font-extrabold text-white mt-0.5">Hot Gulab Jamun — ₹10 / 1 Pc</h4>
+                </div>
+              </div>
+              <button onclick="addToCanteenCart('special-gj')" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
+                + Add to Order (₹10)
+              </button>
+            </div>
+
+            <!-- Search & Category Filter -->
+            <div class="flex flex-wrap gap-2">
+              <div class="relative flex-1 min-w-[200px]">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                <input type="text" id="canteenSearchInput" oninput="renderCanteenMenu()" placeholder="Search Maggi, Paratha, Roll, Coffee, Chilli..." class="w-full bg-slate-900 text-xs text-white rounded-xl pl-9 pr-4 py-2.5 border border-slate-700 focus:outline-none focus:border-amber-500" />
+              </div>
+              <select id="canteenCategorySelect" onchange="renderCanteenMenu()" class="bg-slate-900 text-xs text-slate-200 font-semibold rounded-xl px-3 py-2.5 border border-slate-700">
+                <option value="ALL">All Categories (45 Items)</option>
+                <option value="Hot Beverages">Hot Beverages</option>
+                <option value="Maggi">Maggi</option>
+                <option value="Sandwiches">Sandwiches</option>
+                <option value="Paratha">Paratha</option>
+                <option value="Egg Items">Egg Items</option>
+                <option value="Rice">Fried Rice</option>
+                <option value="Rolls">Rolls</option>
+                <option value="Chilli">Chilli</option>
+                <option value="Curry">Curry</option>
+                <option value="Noodles">Noodles</option>
+                <option value="Fries & Snacks">Fries, Snacks & Soup</option>
+              </select>
+            </div>
+
+            <!-- Canteen Items Grid -->
+            <div id="canteenItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Right 4 Cols: Canteen Order Tray & Friend Bill Splitter -->
+          <div class="lg:col-span-4">
+            <div class="glass-card rounded-2xl p-5 sticky top-24 border border-amber-500/30 space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                  <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-amber-400"></i>
+                    Canteen Bill Calculator
+                  </h3>
+                  <p class="text-xs text-slate-400">Estimate order & split with friends</p>
+                </div>
+                <button onclick="clearCanteenCart()" class="text-xs text-rose-400 hover:underline">Clear</button>
+              </div>
+
+              <div id="canteenCartList" class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                <!-- Populated by JS -->
+              </div>
+
+              <div class="pt-3 border-t border-slate-800 space-y-3">
+                <div class="flex items-center justify-between text-sm">
+                  <span class="text-slate-400 font-medium">Total Bill Amount</span>
+                  <span id="canteenTotalAmount" class="text-2xl font-mono font-extrabold text-amber-400">₹0</span>
+                </div>
+
+                <!-- Split among friends -->
+                <div class="bg-slate-900/90 rounded-xl p-3 border border-slate-800 space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Split among friends:</span>
+                    <div class="flex items-center gap-2">
+                      <button onclick="adjustSplitCount(-1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">-</button>
+                      <span id="canteenSplitCount" class="font-mono font-bold text-white">1</span>
+                      <button onclick="adjustSplitCount(1)" class="w-6 h-6 rounded bg-slate-800 text-white font-bold">+</button>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80">
+                    <span class="text-slate-300 font-semibold">Per Person Share:</span>
+                    <span id="canteenSplitPerPerson" class="font-mono font-bold text-emerald-400 text-sm">₹0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 5: CAMPUS FACILITIES (B-MART, LIBRARY, SPORTS, CANTEEN, MEDICAL)  -->
+      <!-- ===================================================================== -->
+      <section id="tab-facilities" class="tab-section hidden space-y-6">
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-store text-cyan-400"></i>
+              Campus Outlets, Library, Sports & B-Mart Status
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Live open/closed indicator, operating hours, and facility details inside IIIT-NR Campus</p>
+          </div>
+          <div class="text-xs font-mono bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-800 text-cyan-300">
+            <i class="fa-regular fa-clock mr-1"></i> Live Check Active
+          </div>
+        </div>
+
+        <div id="fullFacilitiesDetailGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 6: BUS STAND & SHUTTLE TIMINGS (NAYA RAIPUR BRTS)                 -->
+      <!-- ===================================================================== -->
+      <section id="tab-bus" class="tab-section hidden space-y-6">
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-bus text-rose-400"></i>
+              Naya Raipur BRTS Bus Stand & Campus Shuttle Timings
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Connects IIIT-NR Gate / HNLU (Sector-24) ↔ CBD Sector-21 ↔ Telibandha ↔ DKS ↔ Raipur Railway Station</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold">
+              AC BRTS Fare: ₹10 – ₹40
+            </span>
+          </div>
+        </div>
+
+        <!-- Direction Filter & Next Bus Highlight -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Direction 1: Campus -> Raipur City / Railway Station -->
+          <div class="glass-card rounded-2xl p-5 border border-rose-500/30">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">Outbound to City</span>
+                <h3 class="text-base font-bold text-white mt-1">IIIT-NR Gate / HNLU → Raipur Railway Station</h3>
+                <p class="text-xs text-slate-400">Via Sector-24 • CBD Sec-21 • Mandir Hasaud • Telibandha • Ghadi Chowk</p>
+              </div>
+              <i class="fa-solid fa-train-subway text-2xl text-rose-400"></i>
+            </div>
+            <div id="busOutboundList" class="space-y-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Direction 2: Raipur Railway Station -> IIIT-NR Campus -->
+          <div class="glass-card rounded-2xl p-5 border border-indigo-500/30">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">Inbound to Campus</span>
+                <h3 class="text-base font-bold text-white mt-1">Raipur Railway Station → CBD → IIIT-NR Gate</h3>
+                <p class="text-xs text-slate-400">Via Ghadi Chowk • Telibandha • CBD Sec-21 • Sector-24 • HNLU/IIIT-NR</p>
+              </div>
+              <i class="fa-solid fa-building-columns text-2xl text-indigo-400"></i>
+            </div>
+            <div id="busInboundList" class="space-y-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Campus Shuttle & Local Auto/Cab Info -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="glass-card rounded-2xl p-4">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-1.5">
+              <i class="fa-solid fa-van-shuttle text-emerald-400"></i> Institute Evening Shuttle
+            </h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Runs from Main Gate / Hostels to Sector-27 Market & CBD on Weekends and designated evenings (5:30 PM Departure, 7:30 PM Return).
+            </p>
+          </div>
+          <div class="glass-card rounded-2xl p-4">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-1.5">
+              <i class="fa-solid fa-plane-departure text-cyan-400"></i> Swami Vivekananda Airport (RPR)
+            </h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Just ~12 km (18 mins) from IIIT Naya Raipur campus via Sector-24 Airport Expressway. Shared cabs/autos available at Gate-1.
+            </p>
+          </div>
+          <div class="glass-card rounded-2xl p-4">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2 mb-1.5">
+              <i class="fa-solid fa-taxi text-amber-400"></i> Sector-24 E-Rickshaw & Auto Stand
+            </h4>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Available outside Gate-1 & HNLU Chowk from 6:30 AM to 10:00 PM for quick rides to Sector-27, Sector-19, and Jungle Safari.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 7: ACADEMIC CALENDAR & OFFICIAL HOLIDAYS (AUTUMN 2026-27)         -->
+      <!-- ===================================================================== -->
+      <section id="tab-calendar" class="tab-section hidden space-y-6">
+        <!-- Header & Teaching Days Stats -->
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-purple-400"></i>
+              Official Academic Calendar & Holidays (Sem-I 2026-27)
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Dr. SPM IIIT Naya Raipur • Dated 18/August/2026 • Total 71 Teaching Days</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2 text-xs font-mono">
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">Mon: <b>13</b></span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">Tue: <b>13</b></span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">Wed: <b>15</b></span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">Thu: <b>16</b></span>
+            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300">Fri: <b>14</b></span>
+            <span class="px-3 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold">Total: 71 Days</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left 7 Cols: 19 Academic Events Timeline -->
+          <div class="lg:col-span-7 glass-card rounded-2xl p-5">
+            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-flag-checkered text-indigo-400"></i>
+              Semester Schedule & Examination Milestones
+            </h3>
+            <div id="academicEventsTimeline" class="space-y-3">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Right 5 Cols: 17 Official Holidays List -->
+          <div class="lg:col-span-5 glass-card rounded-2xl p-5">
+            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-umbrella-beach text-amber-400"></i>
+              Official List of Gazette Holidays (2026)
+            </h3>
+            <div id="holidaysListContainer" class="space-y-2.5">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ===================================================================== -->
+      <!-- TAB 8: RAMAN HOSTEL & BATCH 2026-30 STUDENT DIRECTORY                 -->
+      <!-- ===================================================================== -->
+      <section id="tab-directory" class="tab-section hidden space-y-6">
+        <div class="glass-card rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+                <i class="fa-solid fa-building-user text-teal-400"></i>
+                Raman Hostel Room Allotment & Batch 2026–30 Directory
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Find your roommates, floor-mates, and DSAI/CSE/ECE batchmates by Name, Roll No., or Room No.</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="px-3 py-1.5 rounded-xl bg-teal-500/15 text-teal-300 border border-teal-500/30 font-semibold">
+                <i class="fa-solid fa-shield-halved mr-1"></i>Privacy Safe Directory
+              </span>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-6 relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+              <input type="text" id="studentSearchInput" oninput="renderStudentDirectory()" placeholder="Search by Student Name, Room No. (e.g. 401, 305, 101) or Roll No. (261020401)..." class="w-full bg-slate-900 text-xs text-white rounded-xl pl-9 pr-4 py-2.5 border border-slate-700 focus:outline-none focus:border-teal-500" />
+            </div>
+            <select id="studentBranchFilter" onchange="renderStudentDirectory()" class="sm:col-span-3 bg-slate-900 text-xs text-slate-200 font-semibold rounded-xl px-3 py-2.5 border border-slate-700">
+              <option value="ALL">All Branches (DSAI, CSE, ECE)</option>
+              <option value="DSAI">B.Tech DSAI</option>
+              <option value="CSE">B.Tech CSE</option>
+              <option value="ECE">B.Tech ECE</option>
+            </select>
+            <select id="studentFloorFilter" onchange="renderStudentDirectory()" class="sm:col-span-3 bg-slate-900 text-xs text-slate-200 font-semibold rounded-xl px-3 py-2.5 border border-slate-700">
+              <option value="ALL">All Raman Hostel Floors & Roll List</option>
+              <option value="4">4th Floor (Rooms 400–441)</option>
+              <option value="3">3rd Floor (Rooms 300–338)</option>
+              <option value="2">2nd Floor (Rooms 200–228)</option>
+              <option value="1">1st Floor (Rooms 101–123)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="studentDirectoryCount" class="text-xs text-slate-400 font-medium px-1"></div>
+
+        <!-- Directory Results Grid -->
+        <div id="studentDirectoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ======================= MOBILE BOTTOM NAVIGATION BAR ======================= -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 z-30 px-2 py-1.5 flex items-center justify-around">
+    <button onclick="switchTab('dashboard')" data-tab="dashboard" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-indigo-400">
+      <i class="fa-solid fa-table-columns text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Home</span>
+    </button>
+    <button onclick="switchTab('schedule')" data-tab="schedule" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400">
+      <i class="fa-solid fa-calendar-week text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Classes</span>
+    </button>
+    <button onclick="switchTab('study')" data-tab="study" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400">
+      <i class="fa-solid fa-fire-flame-curved text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">YPT Study</span>
+    </button>
+    <button onclick="switchTab('mess')" data-tab="mess" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400">
+      <i class="fa-solid fa-utensils text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Mess/Food</span>
+    </button>
+    <button onclick="switchTab('facilities')" data-tab="facilities" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400">
+      <i class="fa-solid fa-store text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Outlets</span>
+    </button>
+    <button onclick="switchTab('directory')" data-tab="directory" class="mob-nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400">
+      <i class="fa-solid fa-building-user text-base"></i>
+      <span class="text-[10px] font-semibold mt-0.5">Hostel</span>
+    </button>
+  </nav>
+
+  <!-- ======================= NOTIFICATION DRAWER ======================= -->
+  <div id="notificationDrawer" class="fixed inset-y-0 right-0 w-full max-w-sm bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-bell text-indigo-400"></i>
+        <h3 class="font-bold text-white text-sm">Campus Notifications & Alerts</h3>
+      </div>
+      <button onclick="toggleNotificationDrawer()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="notificationList" class="flex-1 overflow-y-auto p-4 space-y-3">
+      <!-- Populated by JS -->
+    </div>
+    <div class="p-4 border-t border-slate-800 bg-slate-950/60">
+      <button onclick="openReminderModal()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition">
+        + Create Custom Class / Campus Reminder
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: ADD REMINDER / CUSTOM SLOT ======================= -->
+  <div id="customModalBackdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-md w-full p-6 border border-slate-700 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="modalTitle" class="text-base font-bold text-white">Add Custom Reminder / Extra Class</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form onsubmit="handleModalSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Title / Subject Name</label>
+          <input type="text" id="modalInputTitle" required placeholder="e.g., Extra Tutorial - Linear Algebra (Rm 135)" class="w-full bg-slate-900 text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Day / Category</label>
+            <select id="modalInputDay" class="w-full bg-slate-900 text-xs text-slate-200 rounded-xl px-3 py-2.5 border border-slate-700">
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Time Slot</label>
+            <select id="modalInputSlot" class="w-full bg-slate-900 text-xs text-slate-200 rounded-xl px-3 py-2.5 border border-slate-700">
+              <option value="0">09:00 - 09:55</option>
+              <option value="1">10:00 - 10:55</option>
+              <option value="2">11:00 - 11:55</option>
+              <option value="3">12:00 - 12:55</option>
+              <option value="4">02:00 - 02:55</option>
+              <option value="5">03:00 - 03:55</option>
+              <option value="6">04:00 - 04:55</option>
+              <option value="7">05:00 - 05:55</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">Save to App</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================= MODAL: STUDENT LOGIN & BRANCH ONBOARDING ======================= -->
+  <div id="studentLoginModalBackdrop" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+    <div class="glass-card rounded-3xl max-w-lg w-full p-6 border border-indigo-500/40 shadow-2xl space-y-5">
+      <div class="flex items-start justify-between gap-3 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-400 flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-indigo-500/25">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-extrabold text-white">IIIT-NR Student Portal Login</h3>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Firebase Cloud</span>
+            </div>
+            <p class="text-xs text-slate-400">Select your branch & student profile to sync attendance and classes</p>
+          </div>
+        </div>
+        <button onclick="closeStudentLoginModal()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Quick Auto-Fill from Official IIIT-NR Batch 2026-30 Directory -->
+      <div class="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800 space-y-2">
+        <label class="block text-[11px] font-bold uppercase tracking-wider text-indigo-400">
+          <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Quick Auto-Fill from Batch 2026–30 Roll List
+        </label>
+        <input type="text" id="loginDirectorySearch" oninput="filterLoginDirectorySuggestions(this.value)" placeholder="Type your Name or Roll No (e.g., Aarav Agrawal, Abhinav Bisen, 261020401)..." class="w-full bg-slate-950 text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-indigo-500" />
+        <div id="loginDirectorySuggestions" class="hidden max-h-36 overflow-y-auto space-y-1 pt-1"></div>
+      </div>
+
+      <form onsubmit="handleStudentLoginSubmit(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Student Full Name *</label>
+            <input type="text" id="loginStudentName" required placeholder="e.g., Aarav Agrawal" class="w-full bg-slate-900 text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-indigo-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Enrollment / Roll No. *</label>
+            <input type="text" id="loginStudentRoll" required placeholder="e.g., 261020401" class="w-full bg-slate-900 text-xs font-mono text-white rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-emerald-400 mb-1">Select Your Branch *</label>
+            <select id="loginStudentBranch" required class="w-full bg-slate-900 text-xs font-bold text-white rounded-xl px-3.5 py-2.5 border border-emerald-500/50 focus:outline-none focus:border-emerald-400">
+              <option value="DSAI">B.Tech DSAI (Room 135)</option>
+              <option value="CSE">B.Tech CSE (Room 133)</option>
+              <option value="ECE">B.Tech ECE (Room 134)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Raman / Girls Hostel Room</label>
+            <input type="text" id="loginStudentRoom" placeholder="e.g., Room 401" class="w-full bg-slate-900 text-xs text-white rounded-xl px-3.5 py-2.5 border border-slate-700 focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-between text-[11px] text-slate-300">
+          <span><i class="fa-solid fa-cloud-arrow-up text-indigo-400 mr-1.5"></i>Firebase Auth UID: <b id="loginFirebaseUidText" class="font-mono text-indigo-300">Connecting...</b></span>
+          <span class="text-emerald-400 font-semibold">Auto-Saved</span>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeStudentLoginModal()" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">Close</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white text-xs font-extrabold shadow-lg shadow-indigo-600/30 transition">
+            <i class="fa-solid fa-check mr-1"></i> Save Profile & Sync Branch
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Message Container -->
+  <div id="toastContainer" class="fixed bottom-20 lg:bottom-6 right-4 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ======================= APPLICATION JAVASCRIPT ======================= -->
+  <script>
+    // =========================================================================
+    // 1. EXACT DATA FROM UPLOADED IIIT NAYA RAIPUR FILES
+    // =========================================================================
+
+    const TIME_SLOTS = [
+      { idx: 0, label: '09:00-09:55', startH: 9, startM: 0, endH: 9, endM: 55 },
+      { idx: 1, label: '10:00-10:55', startH: 10, startM: 0, endH: 10, endM: 55 },
+      { idx: 2, label: '11:00-11:55', startH: 11, startM: 0, endH: 11, endM: 55 },
+      { idx: 3, label: '12:00-12:55', startH: 12, startM: 0, endH: 12, endM: 55 },
+      { idx: 4, label: '02:00-02:55', startH: 14, startM: 0, endH: 14, endM: 55 },
+      { idx: 5, label: '03:00-03:55', startH: 15, startM: 0, endH: 15, endM: 55 },
+      { idx: 6, label: '04:00-04:55', startH: 16, startM: 0, endH: 16, endM: 55 },
+      { idx: 7, label: '05:00-05:55', startH: 17, startM: 0, endH: 17, endM: 55 }
+    ];
+
+    // Exact Course & Faculty Mapping from TimeTable Autumn 2026 PDF
+    const COURSES_INFO = {
+      'F': { code: 'Slot F', name: 'Linear Algebra & Matrix Analysis', faculty: 'Dr. Ramakrishna', color: 'indigo', venue: 'Room 135' },
+      'N': { code: 'Slot N', name: 'Calculus', faculty: 'Dr. Mithilesh', color: 'emerald', venue: 'Room 135' },
+      'M': { code: 'Slot M', name: 'Programming with C', faculty: 'Prof. Srinivasa', color: 'cyan', venue: 'Room 135 / Comp Lab' },
+      'B': { code: 'Slot B', name: 'Digital Electronics using Verilog', faculty: 'Dr. Lakhindar', color: 'amber', venue: 'Room 135 / HW Lab' },
+      'C': { code: 'Slot C', name: 'Internet of Things (IoT)', faculty: 'Dr. Shubhangi', color: 'purple', venue: 'Room 135 / IoT Lab' },
+      'ILC': { code: 'Slot ILC', name: 'International Language Competency (ILC)', faculty: 'Dr. Aruna', color: 'rose', venue: 'Room 135' },
+      'G': { code: 'Slot G', name: 'IT Workshop', faculty: 'Prof. Srinivasa', color: 'teal', venue: 'Computer Center Lab' },
+      'A': { code: 'Slot A', name: 'Entrepreneurship', faculty: 'Dr. Amit', color: 'orange', venue: 'Room 135' },
+      'Music': { code: 'Music', name: 'Music', faculty: 'Dr. Darash', color: 'pink', venue: 'Music & Arts Room' },
+      'Yoga': { code: 'Yoga', name: 'Yoga & Wellness', faculty: 'Guest Faculty', color: 'lime', venue: 'SAC / Yoga Hall' },
+      'ILC/Yoga': { code: 'ILC / Yoga', name: 'ILC / Yoga Batch Split', faculty: 'Dr. Aruna / Guest Faculty', color: 'teal', venue: 'Room 135 / Yoga Hall' },
+      'F/C': { code: 'Slot F / C', name: 'Linear Algebra (F) / IoT (C)', faculty: 'Dr. Ramakrishna / Dr. Shubhangi', color: 'indigo', venue: 'Room 135' },
+      'ILC/N': { code: 'ILC / N', name: 'ILC / Calculus Tutorial', faculty: 'Dr. Aruna / Dr. Mithilesh', color: 'emerald', venue: 'Room 135' },
+      'FREE': { code: 'Free', name: 'Self-Study / Library Hour', faculty: 'Open Slot', color: 'slate', venue: 'Library / Hostel' }
+    };
+
+    // Exact Timetable from PDF for DSAI + tailored variations for CSE & ECE
+    const DEFAULT_TIMETABLES = {
+      DSAI: {
+        room: 'Room No. 135',
+        days: {
+          Monday:    ['Music', 'Music', 'C', 'FREE', 'ILC', 'F', 'ILC/Yoga', 'ILC/Yoga'],
+          Tuesday:   ['M', 'FREE', 'A', 'FREE', 'F', 'F', 'B', 'B'],
+          Wednesday: ['ILC', 'FREE', 'N', 'ILC', 'ILC/N', 'ILC', 'Music', 'Music'],
+          Thursday:  ['B', 'M', 'M', 'C', 'M', 'M', 'N', 'B'],
+          Friday:    ['N', 'N', 'F/C', 'FREE', 'ILC', 'ILC', 'Yoga', 'Yoga']
+        }
+      },
+      CSE: {
+        room: 'Room No. 133',
+        days: {
+          Monday:    ['F', 'M', 'B', 'FREE', 'G', 'G', 'ILC/Yoga', 'ILC/Yoga'],
+          Tuesday:   ['N', 'C', 'A', 'FREE', 'M', 'F', 'Music', 'Music'],
+          Wednesday: ['B', 'M', 'N', 'ILC', 'C', 'C', 'FREE', 'Yoga'],
+          Thursday:  ['M', 'B', 'F', 'A', 'ILC', 'ILC', 'N', 'B'],
+          Friday:    ['C', 'N', 'F', 'FREE', 'M', 'M', 'Yoga', 'Yoga']
+        }
+      },
+      ECE: {
+        room: 'Room No. 134',
+        days: {
+          Monday:    ['B', 'B', 'N', 'FREE', 'F', 'M', 'ILC/Yoga', 'ILC/Yoga'],
+          Tuesday:   ['F', 'N', 'A', 'FREE', 'B', 'C', 'G', 'G'],
+          Wednesday: ['M', 'B', 'F', 'ILC', 'N', 'ILC', 'Music', 'Music'],
+          Thursday:  ['C', 'F', 'B', 'M', 'B', 'B', 'N', 'A'],
+          Friday:    ['N', 'M', 'C', 'FREE', 'ILC', 'ILC', 'Yoga', 'Yoga']
+        }
+      }
+    };
+
+    // Exact Official Mess Menu from uploaded photo (Aug-Dec 2026 IIIT Naya Raipur)
+    const MESS_MENU = {
+      Monday: {
+        Breakfast: 'Aloo Paratha, Tomato Chutney, Plain Curd, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Kadi Pakoda, Aloo Chokha, Jeera Rice, Arhar Dal, Chapati, Raita (150 ml), Papad, Salad, Pickle',
+        HighTea: 'Poha, Matar, Chopped Onion, Tea / Milk',
+        Dinner: 'Malai Kofta, Chilli Paneer / Chilli Chicken, Moong Dal, Rice, Chapati, Salad, Fryms, Pickle, Gulab Jamun (2 Pcs)'
+      },
+      Tuesday: {
+        Breakfast: 'Idli, Sambhar & Chutney, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Mix Veg, Chole Masala, Rice, Chana Dal, Chapati, Mix Veg Raita (150 ml), Fryms, Salad, Pickle',
+        HighTea: 'Samosa Chat (2 Pcs) with Sev Namkeen & Chutney, Tea / Milk',
+        Dinner: 'Aloo Matar Tomato Sabji, Soya Chunk, Mix Dal, Rice, Chapati, Salad, Fryms, Pickle'
+      },
+      Wednesday: {
+        Breakfast: 'Poha, Matar Sabji, Chopped Onion & Tomato, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Aloo Patta Gobhi, Soya Chunk, Pachranga Dal, Rice, Chapati, Raita (150 ml), Papad, Salad, Pickle',
+        HighTea: 'Desi Chana Chat, Tea / Milk',
+        Dinner: 'Matar Paneer / Kadai Chicken, Rice, Chana Dal, Chapati, Salad, Fryms, Pickle, Custard with Mix Fruit'
+      },
+      Thursday: {
+        Breakfast: 'Vada, Sambhar & Chutney, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Malai Kofta, Loki Chana, Moong Dal, Rice, Chapati, Curd (100 ml), Fryms, Salad, Pickle',
+        HighTea: 'Pav Bhaji, Tea / Milk',
+        Dinner: 'Chole Curry, Tamatar Chutney, Mix Dal, Bhature / Masala Puri, Jeera Rice, Salad, Fryms, Pickle'
+      },
+      Friday: {
+        Breakfast: 'Methi Paratha, Aloo Tomato Sabji, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Desi Chana Masala, Aloo Simla, Arhar Dal, Rice, Chapati, Raita (150 ml), Papad, Salad, Pickle',
+        HighTea: 'Pasta with Sauce, Tea / Milk',
+        Dinner: 'Butter Paneer / Egg Curry, Moong Dal Chilka, Rice, Chapati, Fryms, Pickle, Moong Dal Halwa'
+      },
+      Saturday: {
+        Breakfast: 'Uttapam, Sambhar & Chutney, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Patta Gobhi + Matar, Aloo Kundru, Toor Dal, Chapati, Curd (100 ml), Fryms, Salad, Pickle',
+        HighTea: 'Bhelpuri, Tea / Milk',
+        Dinner: 'Soya Chilli, Aloo Jeera, Dal, Rice, Chapati, Salad, Fryms, Pickle'
+      },
+      Sunday: {
+        Breakfast: 'Dosa, Sambhar, Chutney, Pickle, Butter, Bread, Jam, Tea / Milk, Boiled Egg (2 Pcs) / Oats 42 gm, Boiled Sprouts with Onion & Tomato',
+        Lunch: 'Chole, Bhature, Mix Dal, Jeera Rice, Chapati, Bundi Raita (150 ml), Fryms, Salad, Pickle',
+        HighTea: 'Pani Puri, Tea / Milk',
+        Dinner: 'Veg Biryani / Chicken Biryani, Raita, Salad, Fryms, Pickle, Jalebi'
+      }
+    };
+
+    // Exact Canteen Fixed Rate Chart & A La Carte Menu from uploaded photo
+    const CANTEEN_ITEMS = [
+      // Special
+      { id: 'special-gj', name: 'Gulab Jamun (1 Pc - Hot Counter Special)', category: 'Fries & Snacks', qty: '1 Pc', price: 10 },
+      // Hot Beverages
+      { id: 'bev-1', name: 'Coffee', category: 'Hot Beverages', qty: '150ml', price: 12 },
+      { id: 'bev-2', name: 'Tea', category: 'Hot Beverages', qty: '150ml', price: 10 },
+      { id: 'bev-3', name: 'Green Tea', category: 'Hot Beverages', qty: '150ml', price: 10 },
+      { id: 'bev-4', name: 'Lemon Tea', category: 'Hot Beverages', qty: '150ml', price: 10 },
+      // Maggi
+      { id: 'mag-1', name: 'Maggi Noodles - Masala Regular', category: 'Maggi', qty: '1 Plate', price: 20 },
+      { id: 'mag-2', name: 'Maggi Noodles - Veg Atta', category: 'Maggi', qty: '1 Plate', price: 30 },
+      { id: 'mag-3', name: 'Maggi Noodles - Other Variants', category: 'Maggi', qty: '1 Plate', price: 35 },
+      // Sandwiches
+      { id: 'san-1', name: 'Bun Butter & Jam', category: 'Sandwiches', qty: '1 Pc', price: 15 },
+      { id: 'san-2', name: 'Veg Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 25 },
+      { id: 'san-3', name: 'Paneer Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 35 },
+      { id: 'san-4', name: 'Chicken Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 45 },
+      { id: 'san-5', name: 'Veg Cheese Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 35 },
+      { id: 'san-6', name: 'Veg Grill Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 35 },
+      { id: 'san-7', name: 'Veg Cheese Grill Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 40 },
+      { id: 'san-8', name: 'Cheese Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 30 },
+      { id: 'san-9', name: 'Cheese Grill Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 40 },
+      { id: 'san-10', name: 'Chocolate Sandwich', category: 'Sandwiches', qty: '1 Pc', price: 35 },
+      // Paratha
+      { id: 'par-1', name: 'Aloo Paratha', category: 'Paratha', qty: '1 Pc', price: 25 },
+      { id: 'par-2', name: 'Paneer Paratha', category: 'Paratha', qty: '1 Pc', price: 40 },
+      { id: 'par-3', name: 'Plain Paratha', category: 'Paratha', qty: '1 Pc', price: 10 },
+      // Egg Items
+      { id: 'egg-1', name: 'Boiled Egg (2 Eggs)', category: 'Egg Items', qty: '2 Eggs', price: 25 },
+      { id: 'egg-2', name: 'Omelette (2 Eggs)', category: 'Egg Items', qty: '2 Eggs', price: 35 },
+      { id: 'egg-3', name: 'Bread Omelette (2 Eggs)', category: 'Egg Items', qty: '2 Eggs', price: 40 },
+      { id: 'egg-4', name: 'Egg Bhurji', category: 'Egg Items', qty: '1 Plate', price: 35 },
+      // Rice
+      { id: 'ric-1', name: 'Egg Fried Rice', category: 'Rice', qty: 'Full', price: 60 },
+      { id: 'ric-2', name: 'Veg Fried Rice', category: 'Rice', qty: 'Full', price: 50 },
+      { id: 'ric-3', name: 'Paneer Fried Rice', category: 'Rice', qty: 'Full', price: 70 },
+      { id: 'ric-4', name: 'Chicken Fried Rice', category: 'Rice', qty: 'Full', price: 70 },
+      // Rolls
+      { id: 'rol-1', name: 'Egg Roll', category: 'Rolls', qty: '1 Pc', price: 40 },
+      { id: 'rol-2', name: 'Chicken Roll', category: 'Rolls', qty: '1 Pc', price: 50 },
+      { id: 'rol-3', name: 'Veg Roll', category: 'Rolls', qty: '1 Pc', price: 35 },
+      { id: 'rol-4', name: 'Paneer Roll', category: 'Rolls', qty: '1 Pc', price: 50 },
+      // Chilli
+      { id: 'chi-1', name: 'Paneer Chilli', category: 'Chilli', qty: '1 Plate', price: 90 },
+      { id: 'chi-2', name: 'Chicken Chilli (6 Pcs)', category: 'Chilli', qty: '6 Pcs', price: 110 },
+      // Curry
+      { id: 'cur-1', name: 'Chicken Curry (2 Pcs)', category: 'Curry', qty: '2 Pcs', price: 120 },
+      { id: 'cur-2', name: 'Egg Curry (2 Eggs)', category: 'Curry', qty: '2 Eggs', price: 50 },
+      { id: 'cur-3', name: 'Paneer Curry (4 Big Pcs)', category: 'Curry', qty: '4 Pcs', price: 100 },
+      // Noodles
+      { id: 'noo-1', name: 'Veg Noodles', category: 'Noodles', qty: 'Full', price: 50 },
+      { id: 'noo-2', name: 'Egg Noodles', category: 'Noodles', qty: 'Full', price: 60 },
+      { id: 'noo-3', name: 'Paneer Noodles', category: 'Noodles', qty: 'Full', price: 70 },
+      { id: 'noo-4', name: 'Chicken Noodles', category: 'Noodles', qty: 'Full', price: 80 },
+      // Fries & Other Items
+      { id: 'fri-1', name: 'Peri-Peri Fries', category: 'Fries & Snacks', qty: '1 Plate', price: 60 },
+      { id: 'fri-2', name: 'Cheese Fries', category: 'Fries & Snacks', qty: '1 Plate', price: 60 },
+      { id: 'fri-3', name: 'French Fries', category: 'Fries & Snacks', qty: '1 Plate', price: 50 },
+      { id: 'fri-4', name: 'Crispy Corn', category: 'Fries & Snacks', qty: '1 Plate', price: 60 },
+      { id: 'fri-5', name: 'Veg Manchurian (6 Pcs)', category: 'Fries & Snacks', qty: '6 Pcs', price: 60 },
+      { id: 'fri-6', name: 'Soup (All Flavours)', category: 'Fries & Snacks', qty: '200ml', price: 30 }
+    ];
+
+    // Campus Facilities & Outlets with Auto Open/Closed Checker
+    const CAMPUS_FACILITIES = [
+      {
+        id: 'bmart',
+        name: 'B-Mart (Campus Supermarket)',
+        icon: 'fa-basket-shopping',
+        color: 'emerald',
+        location: 'Near Student Activity Zone / Hostels',
+        hoursText: '10:00 AM – 09:00 PM (Daily)',
+        details: 'Snacks, cold drinks, notebooks, pens, toiletries, instant noodles, milk, and hostel daily essentials.',
+        checkOpen: (h, m) => {
+          const mins = h * 60 + m;
+          return mins >= 10 * 60 && mins < 21 * 60;
+        }
+      },
+      {
+        id: 'library',
+        name: 'Central Library & Reading Room',
+        icon: 'fa-book-open-reader',
+        color: 'indigo',
+        location: 'Academic Block - Ground & 1st Floor',
+        hoursText: '09:00 AM – 12:00 Midnight (Extended in MTE/ETE)',
+        details: 'AC study hall, IEEE/ACM digital access, reference textbooks, power sockets at every desk, high-speed Wi-Fi.',
+        checkOpen: (h, m) => {
+          const mins = h * 60 + m;
+          return mins >= 9 * 60 && mins <= 23 * 60 + 59;
+        }
+      },
+      {
+        id: 'canteen',
+        name: 'Main Canteen & Night Canteen',
+        icon: 'fa-mug-saucer',
+        color: 'amber',
+        location: 'Near Student Mess / Hostel Block',
+        hoursText: '09:00 AM – 02:00 AM (Late Night Exam Fuel)',
+        details: 'Hot Coffee, Maggi, Parathas, Rolls, Fried Rice, Sandwiches, and ₹10 Hot Gulab Jamuns.',
+        checkOpen: (h, m) => {
+          const mins = h * 60 + m;
+          return mins >= 9 * 60 || mins < 2 * 60;
+        }
+      },
+      {
+        id: 'sports',
+        name: 'Sports Complex, Gym & Courts',
+        icon: 'fa-dumbbell',
+        color: 'cyan',
+        location: 'SAC & Outdoor Sports Complex (Dr. Khilesh Kumar)',
+        hoursText: 'Morning: 6:00–8:30 AM • Evening: 4:30–9:30 PM',
+        details: 'Badminton courts, Table Tennis, Gymnasium, Basketball, Volleyball, Cricket & Football grounds.',
+        checkOpen: (h, m) => {
+          const mins = h * 60 + m;
+          return (mins >= 6 * 60 && mins <= 8 * 60 + 30) || (mins >= 16 * 60 + 30 && mins <= 21 * 60 + 30);
+        }
+      },
+      {
+        id: 'mess',
+        name: 'Student Dining Mess Hall',
+        icon: 'fa-utensils',
+        color: 'rose',
+        location: 'Central Dining Block',
+        hoursText: 'B: 7:30-9:00 | L: 12:30-2:15 | HT: 5:00-6:00 | D: 7:30-9:15',
+        details: '4 meals daily including Boiled Eggs/Oats & Sprouts in breakfast, High Tea snacks, and special dinners.',
+        checkOpen: (h, m) => {
+          const mins = h * 60 + m;
+          return (mins >= 450 && mins <= 540) || (mins >= 750 && mins <= 855) || (mins >= 1020 && mins <= 1080) || (mins >= 1170 && mins <= 1275);
+        }
+      },
+      {
+        id: 'medical',
+        name: 'Health Center & 24×7 Ambulance',
+        icon: 'fa-kit-medical',
+        color: 'teal',
+        location: 'Campus Dispensary (Near Hostel Gate)',
+        hoursText: '24×7 Emergency Nursing • Doctor OPD: 9 AM–1 PM & 4–6 PM',
+        details: 'First aid, doctor consultation, basic medicines, medical rest beds, and 24-hour emergency ambulance.',
+        checkOpen: () => true
+      }
+    ];
+
+    // Naya Raipur BRTS & Shuttle Bus Schedule
+    const BUS_ROUTES = {
+      outbound: [
+        { time: '07:15 AM', h: 7, m: 15, route: 'BRTS AC-101', via: 'IIIT-NR Gate → CBD Sec-21 → Telibandha → Railway Stn', fare: '₹35' },
+        { time: '08:30 AM', h: 8, m: 30, route: 'BRTS AC-102', via: 'HNLU / IIIT-NR → CBD → DKS Bhawan → Railway Stn', fare: '₹35' },
+        { time: '10:15 AM', h: 10, m: 15, route: 'BRTS AC-104', via: 'IIIT-NR Gate → CBD Sec-21 → Telibandha → Railway Stn', fare: '₹35' },
+        { time: '01:20 PM', h: 13, m: 20, route: 'BRTS AC-108', via: 'HNLU / IIIT-NR → CBD → Ghadi Chowk → Railway Stn', fare: '₹35' },
+        { time: '03:45 PM', h: 15, m: 45, route: 'BRTS AC-111', via: 'IIIT-NR Gate → CBD Sec-21 → Telibandha → Railway Stn', fare: '₹35' },
+        { time: '05:15 PM', h: 17, m: 15, route: 'Campus / BRTS', via: 'IIIT-NR Gate → Sec-27 Market / CBD → Raipur City', fare: '₹15–35' },
+        { time: '06:30 PM', h: 18, m: 30, route: 'BRTS AC-115', via: 'HNLU / IIIT-NR → CBD → Telibandha → Railway Stn', fare: '₹35' },
+        { time: '07:45 PM', h: 19, m: 45, route: 'BRTS Last AC', via: 'IIIT-NR Gate → CBD → Telibandha → Railway Stn', fare: '₹35' }
+      ],
+      inbound: [
+        { time: '07:00 AM', h: 7, m: 0, route: 'BRTS AC-201', via: 'Raipur Railway Stn → Telibandha → CBD → IIIT-NR Gate', fare: '₹35' },
+        { time: '08:15 AM', h: 8, m: 15, route: 'BRTS AC-203', via: 'Railway Stn → Ghadi Chowk → CBD → HNLU / IIIT-NR', fare: '₹35' },
+        { time: '09:45 AM', h: 9, m: 45, route: 'BRTS AC-205', via: 'Railway Stn → Telibandha → CBD → IIIT-NR Gate', fare: '₹35' },
+        { time: '12:30 PM', h: 12, m: 30, route: 'BRTS AC-209', via: 'Railway Stn → Telibandha → CBD → IIIT-NR Gate', fare: '₹35' },
+        { time: '03:00 PM', h: 15, m: 0, route: 'BRTS AC-212', via: 'Railway Stn → Ghadi Chowk → CBD → IIIT-NR Gate', fare: '₹35' },
+        { time: '05:00 PM', h: 17, m: 0, route: 'BRTS AC-215', via: 'Railway Stn → Telibandha → CBD → IIIT-NR Gate', fare: '₹35' },
+        { time: '06:45 PM', h: 18, m: 45, route: 'BRTS AC-218', via: 'Railway Stn → Telibandha → CBD → HNLU / IIIT-NR', fare: '₹35' },
+        { time: '08:15 PM', h: 20, m: 15, route: 'BRTS Night AC', via: 'Railway Stn → Telibandha → CBD → IIIT-NR Gate', fare: '₹35' }
+      ]
+    };
+
+    // Exact Academic Calendar Events from uploaded PDF
+    const ACADEMIC_EVENTS = [
+      { event: 'Commencement of Orientation / Induction Program', date: 'August 20, 2026', tag: 'Completed' },
+      { event: 'Commencement of Registration & Classes (Sem-I)', date: 'August 24, 2026', tag: 'Completed' },
+      { event: 'Closing Date to Complete Course Registration', date: 'August 30, 2026', tag: 'Completed' },
+      { event: 'Sports Event — AAGAAZ 2026', date: 'October 18 – 20, 2026', tag: 'Completed' },
+      { event: 'Mid Term Examinations (MTE)', date: 'October 26 – November 03, 2026', tag: 'Active Now' },
+      { event: '5th Convocation of the Institute', date: 'November 2026', tag: 'Upcoming' },
+      { event: 'Communicating List of Short Attendance (B.Tech/M.Tech)', date: 'December 15, 2026', tag: 'Critical' },
+      { event: 'Last Day of Instruction & Detained List (ETE)', date: 'December 17, 2026', tag: 'Important' },
+      { event: 'End Term Examination (ETE) for All Courses', date: 'December 21 – 30, 2026', tag: 'Exam' },
+      { event: 'Semester Break for B.Tech Students', date: 'Dec 31, 2026 – Jan 10, 2027', tag: 'Vacation' },
+      { event: 'Registration & Fee Payment for SPRING 2027 Semester', date: 'January 01 – 04, 2027', tag: 'Upcoming' },
+      { event: 'Commencement of Classes — SPRING 2027 (B.Tech)', date: 'January 11, 2027', tag: 'Next Sem' },
+      { event: 'Declaration of First Semester Results', date: 'January 20, 2027', tag: 'Results' }
+    ];
+
+    // Exact 17 Holidays from uploaded PDF
+    const OFFICIAL_HOLIDAYS = [
+      { sno: '01', name: 'World Tribal Day', date: 'August 09, 2026', day: 'Sunday' },
+      { sno: '02', name: 'Hareli', date: 'August 12, 2026', day: 'Wednesday' },
+      { sno: '03', name: 'Independence Day', date: 'August 15, 2026', day: 'Saturday' },
+      { sno: '04', name: 'Id-E-Milad', date: 'August 26, 2026', day: 'Wednesday' },
+      { sno: '05', name: 'Rakshabandhan', date: 'August 28, 2026', day: 'Friday' },
+      { sno: '06', name: 'Krishna Janmashtami', date: 'September 04, 2026', day: 'Friday' },
+      { sno: '07', name: 'Haritalika Teej', date: 'September 14, 2026', day: 'Monday' },
+      { sno: '08', name: 'Nuwakhai', date: 'September 15, 2026', day: 'Tuesday' },
+      { sno: '09', name: 'Mahatma Gandhi Birthday', date: 'October 02, 2026', day: 'Friday' },
+      { sno: '10', name: 'Mahashtami', date: 'October 19, 2026', day: 'Monday' },
+      { sno: '11', name: 'Vijaya Dashami (Dussehra)', date: 'October 20, 2026', day: 'Tuesday' },
+      { sno: '12', name: 'Diwali', date: 'November 08, 2026', day: 'Sunday' },
+      { sno: '13', name: 'Govardhan Puja', date: 'November 09, 2026', day: 'Monday' },
+      { sno: '14', name: 'Chhath Pooja', date: 'November 15, 2026', day: 'Sunday' },
+      { sno: '15', name: 'Guru Nanak Jayanti', date: 'November 24, 2026', day: 'Tuesday' },
+      { sno: '16', name: 'Guru Ghasi Das Jayanti', date: 'December 18, 2026', day: 'Friday' },
+      { sno: '17', name: 'Christmas', date: 'December 25, 2026', day: 'Friday' }
+    ];
+
+    // Real Student & Raman Hostel Room Data from uploaded PDFs (Privacy-safe: Name, Branch, Roll No, Room No)
+    const STUDENT_DIRECTORY = [
+      { name: 'AARAV AGRAWAL', branch: 'DSAI', roll: '261020401', room: '401' },
+      { name: 'AASIM MANIR', branch: 'CSE', roll: '261010102', room: '401' },
+      { name: 'AAHAAN JAIN', branch: 'ECE', roll: '261030201', room: '400' },
+      { name: 'AANAND KUMAR', branch: 'ECE', roll: '261030202', room: '400' },
+      { name: 'AARYA SRIVASTAVA', branch: 'DSAI', roll: '261020402', room: 'Girls Hostel' },
+      { name: 'AASTHA KANWAR', branch: 'DSAI', roll: '261020403', room: 'Girls Hostel' },
+      { name: 'ABHAY PRATAP KOLI', branch: 'ECE', roll: '261030205', room: '402' },
+      { name: 'ABHINAV BISEN', branch: 'DSAI', roll: '261020404', room: '402' },
+      { name: 'ABHINAV KANWAR', branch: 'CSE', roll: '261010108', room: '403' },
+      { name: 'ABHINAV TYAGI', branch: 'DSAI', roll: '261020406', room: '403' },
+      { name: 'ABHINAV CHAUHAN', branch: 'DSAI', roll: '261020405', room: '404' },
+      { name: 'ABHINAV KRISHNA', branch: 'ECE', roll: '261030209', room: '404' },
+      { name: 'ABHISEK KARMAKAR', branch: 'DSAI', roll: '261020407', room: '405' },
+      { name: 'ADARSH AGRAHARI', branch: 'ECE', roll: '261030211', room: '405' },
+      { name: 'ADARSH BEDRE', branch: 'CSE', roll: '261010112', room: '406' },
+      { name: 'ADARSH LADE', branch: 'CSE', roll: '261010113', room: '406' },
+      { name: 'ADARSH OJHA', branch: 'DSAI', roll: '261020408', room: '407' },
+      { name: 'ADITYA KUMAR SAHA', branch: 'DSAI', roll: '261020409', room: '407' },
+      { name: 'AGRIM THAKUR', branch: 'DSAI', roll: '261020410', room: '408' },
+      { name: 'AKASH SHARMA', branch: 'DSAI', roll: '261020411', room: '408' },
+      { name: 'AKRITI AGRAWAL', branch: 'DSAI', roll: '261020412', room: 'Girls Hostel' },
+      { name: 'AKSHAT CHANDRAKAR', branch: 'CSE', roll: '261010115', room: '409' },
+      { name: 'AKSHAT VERMA', branch: 'ECE', roll: '261030214', room: '409' },
+      { name: 'AKSHIT VERMA', branch: 'CSE', roll: '261010116', room: '410' },
+      { name: 'AKULA KHADGAHASA KARTHIKEYA', branch: 'CSE', roll: '261010117', room: '410' },
+      { name: 'ALOK BHARTI', branch: 'ECE', roll: '261030216', room: '411' },
+      { name: 'ALOK RANJAN', branch: 'CSE', roll: '261010118', room: '411' },
+      { name: 'AMAN GURJAR', branch: 'CSE', roll: '261010119', room: '414' },
+      { name: 'AMITASH RAVINDRA SHETTY', branch: 'DSAI', roll: '261020413', room: '414' },
+      { name: 'ANIRUDH DUTTA', branch: 'ECE', roll: '261030218', room: '415' },
+      { name: 'ANKIT SAINI', branch: 'DSAI', roll: '261020414', room: '415' },
+      { name: 'ANSHAJ KUMAR YADAV', branch: 'DSAI', roll: '261020415', room: '416' },
+      { name: 'ANSHUMAN DHAKAD', branch: 'CSE', roll: '261010121', room: '416' },
+      { name: 'ANUBHAV SINHA', branch: 'CSE', roll: '261010122', room: '417' },
+      { name: 'ANUJ CHAUDHARY', branch: 'ECE', roll: '261030220', room: '417' },
+      { name: 'ANURAG DEWANGAN', branch: 'CSE', roll: '261010123', room: '418' },
+      { name: 'APOORV SINGH', branch: 'DSAI', roll: '261020416', room: '101' },
+      { name: 'AVANISH KESHARWANI', branch: 'DSAI', roll: '261020421', room: '101' },
+      { name: 'ARIJIT SINGH', branch: 'DSAI', roll: '261020417', room: '419' },
+      { name: 'ARJIT KRISHNA', branch: 'CSE', roll: '261010125', room: '419' },
+      { name: 'ARUNI AGRAWAL', branch: 'DSAI', roll: '261020418', room: '200' },
+      { name: 'NAMAN MESHRAM', branch: 'DSAI', roll: '261020460', room: '200' },
+      { name: 'ASHUTOSH MUKHERJEE', branch: 'DSAI', roll: '261020419', room: '423' },
+      { name: 'ASHUTOSH SHARMA', branch: 'CSE', roll: '261010128', room: '423' },
+      { name: 'ASMIT ARYA', branch: 'CSE', roll: '261010129', room: '424' },
+      { name: 'ATHARVA YADAV', branch: 'DSAI', roll: '261020420', room: '424' },
+      { name: 'AVIRAL TRIVEDI', branch: 'ECE', roll: '261030225', room: '425' },
+      { name: 'AYUSH KOWACHI', branch: 'DSAI', roll: '261020423', room: '425' },
+      { name: 'AYUSH KUMAR DAS', branch: 'CSE', roll: '261010131', room: '426' },
+      { name: 'AYUSH KUMAR SINGH', branch: 'DSAI', roll: '261020424', room: '426' },
+      { name: 'AYUSH PANDEY', branch: 'DSAI', roll: '261020425', room: '427' },
+      { name: 'BADAVATH SAI VARSHITH', branch: 'ECE', roll: '261030227', room: '427' },
+      { name: 'BARNAVO MANDAL', branch: 'DSAI', roll: '261020501', room: '428' },
+      { name: 'BHAUMIK SINGH', branch: 'CSE', roll: '261010133', room: '428' },
+      { name: 'CHARAN TEJA PEDHAPELLI', branch: 'DSAI', roll: '261020426', room: '430' },
+      { name: 'CHEKURI RAMAKRISHNA RAJU', branch: 'ECE', roll: '261030230', room: '430' },
+      { name: 'DEBABRATA MUKHERJEE', branch: 'DSAI', roll: '261020429', room: '432' },
+      { name: 'DEEPAK KUMAR DEWANGAN', branch: 'DSAI', roll: '261020430', room: '432' },
+      { name: 'DEV SHUKLA', branch: 'DSAI', roll: '261020431', room: '433' },
+      { name: 'DEVASHISH KISAN', branch: 'CSE', roll: '261010136', room: '433' },
+      { name: 'DHANANJAY NAGAR', branch: 'CSE', roll: '261010137', room: '434' },
+      { name: 'DHARMENDRA KUMAR', branch: 'DSAI', roll: '261020432', room: '434' },
+      { name: 'DOOPATI REVANTH RAJU', branch: 'DSAI', roll: '261020434', room: '437' },
+      { name: 'DIVYANSH SRIVASTAVA', branch: 'ECE', roll: '261030237', room: '437' },
+      { name: 'GEETANK KHURSENGA', branch: 'DSAI', roll: '261020436', room: '441' },
+      { name: 'GIRISH KUMAR KANWAR', branch: 'DSAI', roll: '261020437', room: '441' },
+      { name: 'GOURAV THORY', branch: 'DSAI', roll: '261020438', room: '300' },
+      { name: 'GOTTAM JYOTHI RADITYA REDDY', branch: 'CSE', roll: '261010142', room: '300' },
+      { name: 'ABHIGYAN KUMAR', branch: 'CSE', roll: '261010105', room: '301' },
+      { name: 'GYANENDRA KUMAR KAMDI', branch: 'DSAI', roll: '261020439', room: '302' },
+      { name: 'GUDIDATI SREE JESHWITH', branch: 'ECE', roll: '261030240', room: '302' },
+      { name: 'HANUMANTHU KIRAN ADITYA', branch: 'DSAI', roll: '261020440', room: '303' },
+      { name: 'HARDIK DEWANGAN', branch: 'CSE', roll: '261010144', room: '303' },
+      { name: 'HARSHIT SINGH', branch: 'DSAI', roll: '261020441', room: '305' },
+      { name: 'HARSHIT KUSHWAH', branch: 'ECE', roll: '261030242', room: '305' },
+      { name: 'HIMANSHU RANJAN', branch: 'DSAI', roll: '261020442', room: '306' },
+      { name: 'HARSHVARDHAN BHUARYA', branch: 'CSE', roll: '261010145', room: '306' },
+      { name: 'HIMANSHU SHALIKRAM BHIWGADE', branch: 'DSAI', roll: '261020443', room: '307' },
+      { name: 'HUSAIN KANCHWALA', branch: 'CSE', roll: '261010146', room: '307' },
+      { name: 'JAIYESH EKKA', branch: 'DSAI', roll: '261020445', room: '308' },
+      { name: 'JOHNS KUJUR', branch: 'CSE', roll: '261010147', room: '308' },
+      { name: 'KUMAR SAHIL', branch: 'DSAI', roll: '261020448', room: '316' },
+      { name: 'KUNDAN PATHAK', branch: 'ECE', roll: '261030248', room: '316' },
+      { name: 'KUNJ PATEL', branch: 'DSAI', roll: '261020450', room: '317' },
+      { name: 'KUSHAGRA BHARDWAJ', branch: 'CSE', roll: '261010150', room: '317' },
+      { name: 'LAKSHYARAJ SINGH', branch: 'DSAI', roll: '261020451', room: '319' },
+      { name: 'LAXMAN MURMU', branch: 'CSE', roll: '261010151', room: '319' },
+      { name: 'MADHAV', branch: 'DSAI', roll: '261020453', room: '320' },
+      { name: 'MANIDEEP SHARMA', branch: 'DSAI', roll: '261020454', room: '321' },
+      { name: 'MARISETTI NAMISH SRI SAI SHISHIR', branch: 'DSAI', roll: '261020456', room: '322' },
+      { name: 'MOHIT DHARMESH SHAH', branch: 'DSAI', roll: '261020457', room: '324' },
+      { name: 'MOHIT SINGH', branch: 'DSAI', roll: '261020458', room: '325' },
+      { name: 'MUKESH KUMAR', branch: 'CSE', roll: '261010101', room: '326' },
+      { name: 'MUTHI RISHI VENKAT', branch: 'DSAI', roll: '261020459', room: '327' },
+      { name: 'NAVNEET CHELAK', branch: 'DSAI', roll: '261020461', room: '330' },
+      { name: 'NILESH SINGH', branch: 'DSAI', roll: '261020463', room: '332' },
+      { name: 'PAARIJ PATIL', branch: 'DSAI', roll: '261020465', room: '334' },
+      { name: 'PARTH MEHARCHANDANI', branch: 'DSAI', roll: '261020466', room: '336' },
+      { name: 'PARTH SHARMA', branch: 'DSAI', roll: '261020467', room: '337' },
+      { name: 'PRAKASH AGRAWAL', branch: 'DSAI', roll: '261020468', room: '201' },
+      { name: 'PRINCE KUMAR', branch: 'DSAI', roll: '261020470', room: '207' },
+      { name: 'PUNIT GUPTA', branch: 'DSAI', roll: '261020471', room: '209' },
+      { name: 'RAGHAV AGARWAL', branch: 'DSAI', roll: '261020472', room: '209' },
+      { name: 'RAKESH SINGH SARDAR', branch: 'DSAI', roll: '261020473', room: '211' },
+      { name: 'RISHABH KUMAR', branch: 'DSAI', roll: '261020474', room: '215' },
+      { name: 'ROHAN KUMAR MEHER', branch: 'DSAI', roll: '261020475', room: '215' },
+      { name: 'SAHIL BANJARE', branch: 'DSAI', roll: '261020476', room: '221' },
+      { name: 'SAMARTH SANTOSH KHEDKAR', branch: 'DSAI', roll: '261020477', room: '222' },
+      { name: 'SATWIK SANKRITYAYAN', branch: 'DSAI', roll: '261020480', room: '223' },
+      { name: 'SHAURYA AGARWAL', branch: 'DSAI', roll: '261020482', room: '225' },
+      { name: 'SHAURYA JAIN', branch: 'DSAI', roll: '261020483', room: '225' },
+      { name: 'SRIDHAR SEKHAR PATRO', branch: 'DSAI', roll: '261020488', room: '105' },
+      { name: 'SUFAL SINGH THAKUR', branch: 'DSAI', roll: '261020489', room: '106' },
+      { name: 'SUJAL DEWANGAN', branch: 'DSAI', roll: '261020490', room: '107' },
+      { name: 'SWAMI SHIVLING DHANRAJ', branch: 'DSAI', roll: '261020491', room: '112' },
+      { name: 'UTSAV SHORI', branch: 'DSAI', roll: '261020493', room: '116' },
+      { name: 'UTKARSH SHARMA', branch: 'CSE', roll: '261010160', room: '116' },
+      { name: 'VANSH SINGHAL', branch: 'DSAI', roll: '261020494', room: '117' },
+      { name: 'VEDANSH URAON', branch: 'DSAI', roll: '261020495', room: '118' },
+      { name: 'VEERAVALLI BALA SURYA CHANDRA', branch: 'DSAI', roll: '261020496', room: '118' },
+      { name: 'VIVEK KUMAR SAHU', branch: 'DSAI', roll: '261020498', room: '119' },
+      { name: 'YAGYESH KUDIYAM', branch: 'DSAI', roll: '261020499', room: '120' },
+      { name: 'YASHVARDHAN RAJ', branch: 'DSAI', roll: '261020500', room: '121' }
+    ];
+
+    // =========================================================================
+    // 2. STATE MANAGEMENT & FIREBASE CLOUD PERSISTENCE
+    // =========================================================================
+
+    const DEFAULT_SUBJECT_ATTENDANCE = [
+      { id: 'att-f', code: 'F', name: 'Linear Algebra & Matrix Analysis (Slot F)', faculty: 'Dr. Ramakrishna', attended: 22, total: 25 },
+      { id: 'att-n', code: 'N', name: 'Calculus (Slot N)', faculty: 'Dr. Mithilesh', attended: 20, total: 24 },
+      { id: 'att-m', code: 'M', name: 'Programming with C (Slot M)', faculty: 'Prof. Srinivasa', attended: 26, total: 28 },
+      { id: 'att-b', code: 'B', name: 'Digital Electronics using Verilog (Slot B)', faculty: 'Dr. Lakhindar', attended: 17, total: 23 },
+      { id: 'att-c', code: 'C', name: 'Internet of Things (Slot C)', faculty: 'Dr. Shubhangi', attended: 16, total: 20 },
+      { id: 'att-ilc', code: 'ILC', name: 'International Language Competency (ILC)', faculty: 'Dr. Aruna', attended: 19, total: 22 },
+      { id: 'att-a', code: 'A', name: 'Entrepreneurship (Slot A)', faculty: 'Dr. Amit', attended: 12, total: 14 },
+      { id: 'att-g', code: 'G', name: 'IT Workshop (Slot G)', faculty: 'Prof. Srinivasa', attended: 11, total: 12 },
+      { id: 'att-music', code: 'Music', name: 'Music (Dr. Darash)', faculty: 'Dr. Darash', attended: 10, total: 12 },
+      { id: 'att-yoga', code: 'Yoga', name: 'Yoga & Wellness', faculty: 'Guest Faculty', attended: 11, total: 12 }
+    ];
+
+    let state = {
+      studentProfile: {
+        name: 'AARAV AGRAWAL',
+        roll: '261020401',
+        branch: 'DSAI',
+        room: '401',
+        onboarded: false
+      },
+      branch: 'DSAI',
+      activeTab: 'dashboard',
+      ttDayFilter: 'ALL',
+      selectedMessDay: 'Monday',
+      simulatedSlotIdx: 'AUTO',
+      canteenCart: {},
+      canteenSplit: 1,
+      // YPT Study State
+      yptRunning: false,
+      yptActiveSubjectId: 'sub-m',
+      yptSubjects: [
+        { id: 'sub-f', name: 'Linear Algebra & Matrix Analysis (Slot F)', seconds: 3420, color: 'indigo' },
+        { id: 'sub-n', name: 'Calculus (Slot N)', seconds: 2700, color: 'emerald' },
+        { id: 'sub-m', name: 'Programming with C & Lab (Slot M)', seconds: 4200, color: 'cyan' },
+        { id: 'sub-b', name: 'Digital Electronics & Verilog (Slot B)', seconds: 1800, color: 'amber' },
+        { id: 'sub-c', name: 'Internet of Things (Slot C)', seconds: 1500, color: 'purple' },
+        { id: 'sub-dsa', name: 'Competitive Coding / Codeforces / Lab', seconds: 2100, color: 'rose' }
+      ],
+      // Subject-wise Attendance Counts
+      attendance: JSON.parse(JSON.stringify(DEFAULT_SUBJECT_ATTENDANCE)),
+      // Date & Slot-wise Attendance Log (keyed by YYYY-MM-DD_Day_SlotIdx_Code)
+      attendanceLogs: [
+        {
+          key: '2026-10-28_Wednesday_2_N',
+          dateStr: '2026-10-28',
+          dayName: 'Wednesday',
+          slotIdx: 2,
+          slotLabel: '11:00-11:55',
+          subjectCode: 'N',
+          subjectName: 'Calculus',
+          faculty: 'Dr. Mithilesh',
+          branch: 'DSAI',
+          status: 'present',
+          timestamp: '28 Oct 2026, 11:04 AM'
+        }
+      ],
+      // To-Do Tasks
+      todos: [
+        { id: 1, title: 'Revise Matrix Eigenvalues & Cayley-Hamilton for MTE', course: 'Linear Algebra (F)', priority: 'High', done: false },
+        { id: 2, title: 'Submit Programming in C Pointers & Structs Lab File', course: 'Prog with C (M)', priority: 'High', done: false },
+        { id: 3, title: 'Practice Verilog Testbench for Full Adder & MUX', course: 'Digital Elec (B)', priority: 'Medium', done: false },
+        { id: 4, title: 'Collect Lab Coat & Notebooks from B-Mart before 9 PM', course: 'General', priority: 'Low', done: true }
+      ],
+      // Notifications
+      notifications: [
+        { id: 101, title: 'Mid Term Examinations (MTE) Ongoing', desc: 'Oct 26 – Nov 03, 2026. Check Room 135 seating plan.', time: 'Academic Office', type: 'exam' },
+        { id: 102, title: 'Diwali & Govardhan Puja Holidays', desc: 'Institute holiday on Nov 08 (Sun) & Nov 09 (Mon), 2026.', time: 'GAD Notification', type: 'holiday' },
+        { id: 103, title: '75% Attendance Mandatory Reminder', desc: 'Short attendance list will be published on Dec 15, 2026.', time: 'Dean Academics', type: 'alert' },
+        { id: 104, title: 'B-Mart & Night Canteen Timings', desc: 'B-Mart closes at 9:00 PM. Night Canteen open till 2:00 AM.', time: 'Campus Welfare', type: 'info' }
+      ],
+      customSlots: {}
+    };
+
+    // =========================================================================
+    // 2B. STUDENT LOGIN & LIVE CLASS "MARK PRESENT" HANDLERS
+    // =========================================================================
+
+    function updateStudentHeaderUI() {
+      const p = state.studentProfile;
+      const initials = (p.name || 'ST').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      const elAvatar = document.getElementById('sidebarUserAvatar');
+      const elName = document.getElementById('sidebarUserName');
+      const elMeta = document.getElementById('sidebarUserMeta');
+      const elHeadName = document.getElementById('headerStudentName');
+      const elHeadBranch = document.getElementById('headerStudentBranch');
+
+      if (elAvatar) elAvatar.textContent = initials;
+      if (elName) elName.textContent = p.name || 'Student Login';
+      if (elMeta) elMeta.textContent = `${p.roll || 'Roll No'} • ${p.branch} • Rm ${p.room || 'N/A'}`;
+      if (elHeadName) elHeadName.textContent = p.name || 'Student Login';
+      if (elHeadBranch) elHeadBranch.textContent = p.branch || state.branch;
+    }
+
+    function openStudentLoginModal() {
+      const modal = document.getElementById('studentLoginModalBackdrop');
+      document.getElementById('loginStudentName').value = state.studentProfile.name || '';
+      document.getElementById('loginStudentRoll').value = state.studentProfile.roll || '';
+      document.getElementById('loginStudentBranch').value = state.studentProfile.branch || state.branch;
+      document.getElementById('loginStudentRoom').value = state.studentProfile.room || '';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeStudentLoginModal() {
+      const modal = document.getElementById('studentLoginModalBackdrop');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function filterLoginDirectorySuggestions(query) {
+      const box = document.getElementById('loginDirectorySuggestions');
+      const q = (query || '').trim().toLowerCase();
+      if (!q) {
+        box.classList.add('hidden');
+        return;
+      }
+      const matches = STUDENT_DIRECTORY.filter(s =>
+        s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q) || s.room.toLowerCase().includes(q)
+      ).slice(0, 6);
+
+      if (matches.length === 0) {
+        box.classList.add('hidden');
+        return;
+      }
+      box.classList.remove('hidden');
+      box.innerHTML = matches.map(st => `
+        <div onclick="selectDirectoryStudentForLogin('${st.name.replace(/'/g, '')}', '${st.roll}', '${st.branch}', '${st.room}')" class="cursor-pointer p-2 rounded-xl bg-slate-950 hover:bg-indigo-600/20 border border-slate-800 flex items-center justify-between text-xs transition">
+          <div>
+            <span class="font-bold text-white">${st.name}</span>
+            <span class="text-slate-400 font-mono ml-1.5">(${st.roll})</span>
+          </div>
+          <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">${st.branch} • Rm ${st.room}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectDirectoryStudentForLogin(name, roll, branch, room) {
+      document.getElementById('loginStudentName').value = name;
+      document.getElementById('loginStudentRoll').value = roll;
+      document.getElementById('loginStudentBranch').value = branch;
+      document.getElementById('loginStudentRoom').value = room;
+      document.getElementById('loginDirectorySuggestions').classList.add('hidden');
+      document.getElementById('loginDirectorySearch').value = '';
+      showToast(`Auto-filled ${name} (${branch})`);
+    }
+
+    function handleStudentLoginSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('loginStudentName').value.trim().toUpperCase();
+      const roll = document.getElementById('loginStudentRoll').value.trim();
+      const branch = document.getElementById('loginStudentBranch').value;
+      const room = document.getElementById('loginStudentRoom').value.trim() || 'Raman Hostel';
+
+      state.studentProfile = {
+        name,
+        roll,
+        branch,
+        room,
+        onboarded: true
+      };
+      changeBranch(branch);
+      updateStudentHeaderUI();
+      saveState();
+      closeStudentLoginModal();
+      showToast(`Logged in as ${name} (${branch}) — Synced to Cloud!`);
+    }
+
+    function getTodayDateString() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function normalizeSubjectKey(rawCode) {
+      if (!rawCode) return 'F';
+      if (rawCode.includes('F')) return 'F';
+      if (rawCode.includes('N')) return 'N';
+      if (rawCode.includes('M') && rawCode !== 'Music') return 'M';
+      if (rawCode.includes('B')) return 'B';
+      if (rawCode.includes('C') && !rawCode.includes('ILC')) return 'C';
+      if (rawCode.includes('ILC')) return 'ILC';
+      if (rawCode.includes('A')) return 'A';
+      if (rawCode.includes('G')) return 'G';
+      if (rawCode.includes('Music')) return 'Music';
+      if (rawCode.includes('Yoga')) return 'Yoga';
+      return rawCode;
+    }
+
+    function findAttendanceSubjectRecord(rawCode) {
+      const norm = normalizeSubjectKey(rawCode);
+      return state.attendance.find(a => a.code === norm) || state.attendance[0];
+    }
+
+    function markSlotAttendance(dayName, slotIdx, rawCode, status = 'present') {
+      const c = getSlotCourseForBranch(state.branch, dayName, slotIdx);
+      if (!c || c.code === 'Free') {
+        showToast('This is a Free Self-Study Slot!', 'fa-circle-info');
+        return;
+      }
+
+      const dateStr = getTodayDateString();
+      const logKey = `${dateStr}_${dayName}_${slotIdx}_${state.branch}`;
+      const existingIdx = state.attendanceLogs.findIndex(l => l.key === logKey);
+      const subjRecord = findAttendanceSubjectRecord(rawCode || c.code);
+
+      if (existingIdx !== -1) {
+        // Already marked today for this slot -> Undo / toggle
+        const prev = state.attendanceLogs[existingIdx];
+        state.attendanceLogs.splice(existingIdx, 1);
+        if (subjRecord && subjRecord.total > 0) {
+          subjRecord.total = Math.max(0, subjRecord.total - 1);
+          if (prev.status === 'present') {
+            subjRecord.attended = Math.max(0, subjRecord.attended - 1);
+          }
+        }
+        saveState();
+        updateLiveClockAndStatus();
+        renderDashboardSchedule(document.getElementById('dashDayQuickSelect').value);
+        renderAttendanceTracker();
+        showToast(`Undid attendance for ${c.name}`);
+        return;
+      }
+
+      // Record new attendance entry
+      if (subjRecord) {
+        subjRecord.total += 1;
+        if (status === 'present') {
+          subjRecord.attended += 1;
+        }
+      }
+
+      const nowStr = new Date().toLocaleString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+      });
+
+      state.attendanceLogs.unshift({
+        key: logKey,
+        dateStr,
+        dayName,
+        slotIdx,
+        slotLabel: TIME_SLOTS[slotIdx]?.label || '',
+        subjectCode: subjRecord ? subjRecord.code : c.code,
+        subjectName: c.name,
+        faculty: c.faculty,
+        branch: state.branch,
+        studentName: state.studentProfile.name,
+        studentRoll: state.studentProfile.roll,
+        status,
+        timestamp: nowStr
+      });
+
+      saveState();
+      updateLiveClockAndStatus();
+      renderDashboardSchedule(document.getElementById('dashDayQuickSelect').value);
+      renderAttendanceTracker();
+      showToast(
+        status === 'present'
+          ? `✋ Marked PRESENT in ${c.name} (${subjRecord.attended}/${subjRecord.total} days)`
+          : `Marked Absent in ${c.name}`,
+        status === 'present' ? 'fa-circle-check' : 'fa-circle-exclamation'
+      );
+    }
+
+    function handleSimulateSlotChange(val) {
+      state.simulatedSlotIdx = val;
+      updateLiveClockAndStatus();
+    }
+
+    // Pomodoro Timer State
+    let pomoState = {
+      running: false,
+      mode: 'focus',
+      totalSeconds: 25 * 60,
+      remainingSeconds: 25 * 60,
+      intervalId: null
+    };
+
+    // Simulated Live Study Peers for IIIT-NR Study Room
+    const YPT_PEERS = [
+      { name: 'Aarav Agrawal (DSAI • Rm 401)', course: 'Linear Algebra (Slot F)', baseSecs: 16400, studying: true },
+      { name: 'Amitash R. Shetty (DSAI • Rm 414)', course: 'Programming in C', baseSecs: 15120, studying: true },
+      { name: 'Mukesh Kumar (CSE • Rm 326)', course: 'Digital Electronics', baseSecs: 14200, studying: true },
+      { name: 'Husain Kanchwala (CSE • Rm 307)', course: 'Calculus (Slot N)', baseSecs: 12900, studying: false },
+      { name: 'Adarsh Ojha (DSAI • Rm 407)', course: 'IoT & Sensors', baseSecs: 11850, studying: true },
+      { name: 'Anuj Chaudhary (ECE • Rm 417)', course: 'Verilog HDL Lab', baseSecs: 10400, studying: true }
+    ];
+
+    // =========================================================================
+    // 3. HELPER & FORMATTING FUNCTIONS
+    // =========================================================================
+
+    function formatHMS(totalSecs) {
+      const s = Math.max(0, Math.floor(totalSecs));
+      const hrs = String(Math.floor(s / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+      const secs = String(s % 60).padStart(2, '0');
+      return `${hrs}:${mins}:${secs}`;
+    }
+
+    function showToast(msg, icon = 'fa-circle-check') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'bg-slate-900/95 border border-indigo-500/40 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5 text-xs font-semibold animate-bounce';
+      toast.innerHTML = `<i class="fa-solid ${icon} text-emerald-400 text-sm"></i><span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3200);
+    }
+
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function saveState() {
+      if (window.syncStateToFirebase) {
+        window.syncStateToFirebase();
+      }
+    }
+
+    // =========================================================================
+    // 4. NAVIGATION & BRANCH SWITCHING
+    // =========================================================================
+
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.classList.remove('hidden');
+
+      // Update Desktop Sidebar Buttons
+      document.querySelectorAll('#desktopNav .nav-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/25';
+        } else {
+          btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800/70 transition-all';
+        }
+      });
+
+      // Update Mobile Bottom Nav
+      document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+        if (btn.dataset.tab === tabId) {
+          btn.classList.remove('text-slate-400');
+          btn.classList.add('text-indigo-400');
+        } else {
+          btn.classList.remove('text-indigo-400');
+          btn.classList.add('text-slate-400');
+        }
+      });
+
+      const titles = {
+        dashboard: 'Campus Command Center',
+        schedule: 'Class & Lab Schedule',
+        study: 'YPT Study Tracker & Focus Hub',
+        mess: 'Mess Menu & Canteen Calculator',
+        facilities: 'Campus Outlets & Timings',
+        bus: 'Bus Stand & Shuttle Schedule',
+        calendar: 'Academic Calendar & Holidays',
+        directory: 'Raman Hostel & Batch Directory'
+      };
+      document.getElementById('pageHeaderTitle').textContent = titles[tabId] || 'IIIT-NR Pulse';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function changeBranch(branch) {
+      state.branch = branch;
+      saveState();
+      document.getElementById('branchSelectorDesktop').value = branch;
+      document.getElementById('branchSelectorMobile').value = branch;
+
+      const roomMap = { DSAI: 'Rm 135', CSE: 'Rm 133', ECE: 'Rm 134' };
+      document.getElementById('activeBranchBadge').textContent = `${branch} • ${roomMap[branch]}`;
+      document.getElementById('dashRoomBadge').textContent = `Room No. ${roomMap[branch].replace('Rm ', '')}`;
+      document.getElementById('scheduleBranchPill').textContent = `B.Tech I Sem ${branch} • ${DEFAULT_TIMETABLES[branch].room}`;
+
+      document.querySelectorAll('.branch-tab-btn').forEach(btn => {
+        if (btn.dataset.branch === branch) {
+          btn.className = 'branch-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white transition';
+        } else {
+          btn.className = 'branch-tab-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+        }
+      });
+
+      renderTimetableGrid();
+      updateLiveClockAndStatus();
+      renderDashboardSchedule(document.getElementById('dashDayQuickSelect').value);
+      showToast(`Switched to B.Tech ${branch} (${DEFAULT_TIMETABLES[branch].room})`);
+    }
+
+    // =========================================================================
+    // 5. LIVE CLOCK, LIVE CLASS RADAR, MESS RADAR & FACILITY STATUS
+    // =========================================================================
+
+    function getDayName(dateObj) {
+      return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
+    }
+
+    function getSlotCourseForBranch(branch, dayName, slotIdx) {
+      const customKey = `${branch}_${dayName}_${slotIdx}`;
+      if (state.customSlots[customKey]) {
+        return {
+          rawKey: 'F',
+          code: 'Custom',
+          name: state.customSlots[customKey],
+          faculty: 'Custom Slot',
+          color: 'indigo',
+          venue: DEFAULT_TIMETABLES[branch].room
+        };
+      }
+      const branchData = DEFAULT_TIMETABLES[branch] || DEFAULT_TIMETABLES.DSAI;
+      const daySlots = branchData.days[dayName];
+      if (!daySlots) return null;
+      const rawKey = daySlots[slotIdx] || 'FREE';
+      const info = COURSES_INFO[rawKey] || { code: rawKey, name: rawKey, faculty: 'Faculty', color: 'indigo', venue: branchData.room };
+      return { ...info, rawKey };
+    }
+
+    function updateLiveClockAndStatus() {
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const dayName = getDayName(now);
+
+      // Update Sidebar Clock & Header Date
+      document.getElementById('sidebarClock').textContent = now.toLocaleTimeString('en-IN', { hour12: true });
+      document.getElementById('currentDateDisplay').textContent = now.toLocaleDateString('en-IN', {
+        weekday: 'long', year: 'numeric', month: 'short', day: 'numeric'
+      }) + ' • Atal Nagar-Nava Raipur';
+
+      // 1. Determine Live / Ongoing Class (or Simulated Slot for anytime testing)
+      const effectiveDay = (dayName === 'Saturday' || dayName === 'Sunday') ? 'Monday' : dayName;
+      let activeSlotIdx = 0;
+      let currentCourse = null;
+      let nextCourse = null;
+      let statusLabel = '';
+
+      if (state.simulatedSlotIdx !== 'AUTO') {
+        activeSlotIdx = parseInt(state.simulatedSlotIdx, 10) || 0;
+        currentCourse = {
+          ...getSlotCourseForBranch(state.branch, effectiveDay, activeSlotIdx),
+          timeLabel: TIME_SLOTS[activeSlotIdx].label,
+          slotIdx: activeSlotIdx,
+          dayName: effectiveDay
+        };
+        if (activeSlotIdx + 1 < TIME_SLOTS.length) {
+          nextCourse = {
+            ...getSlotCourseForBranch(state.branch, effectiveDay, activeSlotIdx + 1),
+            timeLabel: TIME_SLOTS[activeSlotIdx + 1].label
+          };
+        }
+        statusLabel = `Active Slot (${effectiveDay})`;
+      } else {
+        const nowMins = h * 60 + m;
+        for (let i = 0; i < TIME_SLOTS.length; i++) {
+          const slot = TIME_SLOTS[i];
+          const startMins = slot.startH * 60 + slot.startM;
+          const endMins = slot.endH * 60 + slot.endM;
+          if (nowMins >= startMins && nowMins <= endMins && dayName !== 'Saturday' && dayName !== 'Sunday') {
+            activeSlotIdx = i;
+            currentCourse = { ...getSlotCourseForBranch(state.branch, effectiveDay, i), timeLabel: slot.label, slotIdx: i, dayName: effectiveDay };
+            if (i + 1 < TIME_SLOTS.length) {
+              nextCourse = { ...getSlotCourseForBranch(state.branch, effectiveDay, i + 1), timeLabel: TIME_SLOTS[i + 1].label };
+            }
+            statusLabel = 'Ongoing Class Now';
+            break;
+          } else if (nowMins < startMins) {
+            activeSlotIdx = i;
+            nextCourse = { ...getSlotCourseForBranch(state.branch, effectiveDay, i), timeLabel: slot.label, slotIdx: i, dayName: effectiveDay };
+            statusLabel = (dayName === 'Saturday' || dayName === 'Sunday') ? 'Monday Class Slot' : 'Ongoing / Next Slot';
+            break;
+          }
+        }
+
+        if (!currentCourse && !nextCourse) {
+          const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+          const curIdx = daysOrder.indexOf(effectiveDay);
+          const nextDay = daysOrder[(curIdx + 1) % 5];
+          activeSlotIdx = 0;
+          nextCourse = { ...getSlotCourseForBranch(state.branch, nextDay, 0), timeLabel: `${nextDay} 09:00-09:55`, slotIdx: 0, dayName: nextDay };
+          statusLabel = 'Next Class Slot';
+        }
+      }
+
+      const displayObj = currentCourse || nextCourse;
+      document.getElementById('topClassStatusLabel').textContent = statusLabel + ':';
+      document.getElementById('topClassName').textContent = `${displayObj.name} (${displayObj.timeLabel})`;
+
+      // Check if attendance is already marked for this ongoing slot today
+      const dateStr = getTodayDateString();
+      const targetDay = displayObj.dayName || effectiveDay;
+      const targetSlotIdx = displayObj.slotIdx ?? activeSlotIdx;
+      const logKey = `${dateStr}_${targetDay}_${targetSlotIdx}_${state.branch}`;
+      const existingLog = state.attendanceLogs.find(l => l.key === logKey);
+      const subjRec = findAttendanceSubjectRecord(displayObj.rawKey || displayObj.code);
+      const subjPct = subjRec && subjRec.total > 0 ? Math.round((subjRec.attended / subjRec.total) * 100) : 100;
+      const isFreeSlot = displayObj.code === 'Free';
+
+      let actionButtonsHtml = '';
+      if (isFreeSlot) {
+        actionButtonsHtml = `
+          <span class="px-3 py-2 rounded-xl bg-slate-800/80 text-slate-400 text-xs font-semibold border border-slate-700 shrink-0">
+            Free Self-Study Hour
+          </span>
+        `;
+      } else if (existingLog) {
+        const isPres = existingLog.status === 'present';
+        actionButtonsHtml = `
+          <div class="flex flex-col items-end gap-1 shrink-0">
+            <button onclick="markSlotAttendance('${targetDay}', ${targetSlotIdx}, '${displayObj.rawKey || displayObj.code}', 'present')" class="px-3.5 py-2 rounded-xl ${
+              isPres
+                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+            } text-xs font-extrabold flex items-center gap-1.5 transition hover:opacity-80" title="Click to undo">
+              <i class="fa-solid ${isPres ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+              <span>${isPres ? 'Present Marked' : 'Absent Marked'}</span>
+            </button>
+            <span class="text-[10px] text-slate-400 font-mono">Tap to Undo • ${subjRec.attended}/${subjRec.total} (${subjPct}%)</span>
+          </div>
+        `;
+      } else {
+        actionButtonsHtml = `
+          <div class="flex flex-col items-end gap-1.5 shrink-0">
+            <div class="flex items-center gap-1.5">
+              <button onclick="markSlotAttendance('${targetDay}', ${targetSlotIdx}, '${displayObj.rawKey || displayObj.code}', 'present')" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-extrabold flex items-center gap-1.5 shadow-lg shadow-emerald-500/25 transition transform active:scale-95">
+                <i class="fa-solid fa-hand-sparkles"></i>
+                <span>Mark Present</span>
+              </button>
+              <button onclick="markSlotAttendance('${targetDay}', ${targetSlotIdx}, '${displayObj.rawKey || displayObj.code}', 'absent')" class="px-2.5 py-2.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border border-slate-700 text-xs font-bold transition" title="Mark Absent">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            <span class="text-[10px] text-emerald-300 font-mono font-semibold">Attended: ${subjRec.attended}/${subjRec.total} days (${subjPct}%)</span>
+          </div>
+        `;
+      }
+
+      document.getElementById('dashCurrentClassBox').innerHTML = `
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">${statusLabel} • ${displayObj.timeLabel}</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">${displayObj.code}</span>
+            </div>
+            <h4 class="text-base sm:text-lg font-extrabold text-white mt-1.5 leading-snug">${displayObj.name}</h4>
+            <p class="text-xs text-slate-300 mt-0.5"><i class="fa-solid fa-user-tie mr-1 text-indigo-400"></i>${displayObj.faculty} • ${displayObj.venue}</p>
+          </div>
+          ${actionButtonsHtml}
+        </div>
+      `;
+      document.getElementById('dashNextClassSub').textContent = nextCourse && currentCourse
+        ? `Next: ${nextCourse.name} (${nextCourse.timeLabel})`
+        : `Student: ${state.studentProfile.name} (${state.branch})`;
+
+      // 2. Live Mess Meal Card on Dashboard
+      const nowMins = h * 60 + m;
+      const todayMenu = MESS_MENU[dayName] || MESS_MENU.Monday;
+      let mealTitle = 'Dinner (7:30–9:15 PM)';
+      let mealContent = todayMenu.Dinner;
+      if (nowMins < 9 * 60 + 15) {
+        mealTitle = 'Breakfast (7:30–9:00 AM)';
+        mealContent = todayMenu.Breakfast;
+      } else if (nowMins < 14 * 60 + 30) {
+        mealTitle = 'Lunch (12:30–2:15 PM)';
+        mealContent = todayMenu.Lunch;
+      } else if (nowMins < 18 * 60 + 15) {
+        mealTitle = 'High Tea (5:00–6:00 PM)';
+        mealContent = todayMenu.HighTea;
+      }
+      document.getElementById('dashMessDayBadge').textContent = dayName;
+      document.getElementById('dashMessCurrentBox').innerHTML = `
+        <div class="text-xs font-bold text-amber-300">${mealTitle}</div>
+        <p class="text-xs text-slate-200 leading-relaxed line-clamp-3">${mealContent}</p>
+      `;
+
+      // 3. Live Facilities Open/Closed Status
+      renderFacilitiesStatus(h, m);
+
+      // 4. Live Next Bus Box
+      renderNextBusWidget(h, m);
+    }
+
+    function renderFacilitiesStatus(h, m) {
+      let openCount = 0;
+      const dashGrid = document.getElementById('dashFacilitiesGrid');
+      const fullGrid = document.getElementById('fullFacilitiesDetailGrid');
+
+      const dashHtml = [];
+      const fullHtml = [];
+
+      CAMPUS_FACILITIES.forEach(fac => {
+        const isOpen = fac.checkOpen(h, m);
+        if (isOpen) openCount++;
+
+        const badgeHtml = isOpen
+          ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>OPEN NOW</span>`
+          : `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>CLOSED</span>`;
+
+        dashHtml.push(`
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800/90 flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-${fac.color}-500/15 text-${fac.color}-400 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid ${fac.icon}"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-white">${fac.name}</h4>
+                <p class="text-[11px] text-slate-400 mt-0.5">${fac.hoursText}</p>
+              </div>
+            </div>
+            ${badgeHtml}
+          </div>
+        `);
+
+        fullHtml.push(`
+          <div class="glass-card rounded-2xl p-5 flex flex-col justify-between border border-slate-800">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-${fac.color}-500/20 text-${fac.color}-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid ${fac.icon}"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-white">${fac.name}</h3>
+                    <p class="text-xs text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${fac.location}</p>
+                  </div>
+                </div>
+                ${badgeHtml}
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed mb-3">${fac.details}</p>
+            </div>
+            <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+              <span class="text-slate-400 font-medium">Timings:</span>
+              <span class="font-mono font-semibold text-slate-200">${fac.hoursText}</span>
+            </div>
+          </div>
+        `);
+      });
+
+      dashGrid.innerHTML = dashHtml.join('');
+      fullGrid.innerHTML = fullHtml.join('');
+      document.getElementById('sidebarOpenCount').textContent = `${openCount}/6 Open`;
+    }
+
+    // =========================================================================
+    // 6. TIMETABLE & FACULTY DIRECTORY RENDERING
+    // =========================================================================
+
+    function renderDashboardSchedule(dayName) {
+      const select = document.getElementById('dashDayQuickSelect');
+      if (select.value !== dayName) select.value = dayName;
+      document.getElementById('dashScheduleSubtitle').textContent = `${dayName} • B.Tech I Sem ${state.branch} (${DEFAULT_TIMETABLES[state.branch].room})`;
+
+      const container = document.getElementById('dashTodayTimeline');
+      const items = [];
+      const dateStr = getTodayDateString();
+
+      TIME_SLOTS.forEach((slot, idx) => {
+        if (idx === 4) {
+          items.push(`
+            <div class="px-3.5 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold flex items-center justify-between">
+              <span><i class="fa-solid fa-utensils mr-2"></i>01:00 - 02:00 PM — Mess Lunch Break</span>
+              <span class="text-[11px] font-mono">Dining Hall</span>
+            </div>
+          `);
+        }
+        const c = getSlotCourseForBranch(state.branch, dayName, idx);
+        const isFree = c.code === 'Free';
+        const logKey = `${dateStr}_${dayName}_${idx}_${state.branch}`;
+        const existingLog = state.attendanceLogs.find(l => l.key === logKey);
+        const subjRec = findAttendanceSubjectRecord(c.rawKey || c.code);
+
+        let presentBtnHtml = '';
+        if (!isFree) {
+          if (existingLog) {
+            const isPres = existingLog.status === 'present';
+            presentBtnHtml = `
+              <button onclick="markSlotAttendance('${dayName}', ${idx}, '${c.rawKey || c.code}', 'present')" class="px-2.5 py-1.5 rounded-lg ${
+                isPres
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+              } text-[11px] font-bold flex items-center gap-1 transition" title="Click to undo">
+                <i class="fa-solid ${isPres ? 'fa-check' : 'fa-xmark'}"></i>
+                <span>${isPres ? 'Present' : 'Absent'} (${subjRec.attended}/${subjRec.total})</span>
+              </button>
+            `;
+          } else {
+            presentBtnHtml = `
+              <button onclick="markSlotAttendance('${dayName}', ${idx}, '${c.rawKey || c.code}', 'present')" class="px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/30 text-[11px] font-bold flex items-center gap-1 transition">
+                <i class="fa-solid fa-hand"></i>
+                <span>Present (${subjRec.attended}/${subjRec.total})</span>
+              </button>
+            `;
+          }
+        }
+
+        items.push(`
+          <div class="p-3 rounded-xl ${isFree ? 'bg-slate-900/40 border border-slate-800/60 opacity-75' : 'bg-slate-900/90 border border-slate-800'} flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="text-xs font-mono font-semibold text-slate-400 w-24 shrink-0">${slot.label}</span>
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">${c.name}</h4>
+                <p class="text-[11px] text-slate-400 truncate">${c.faculty} • ${c.venue}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 ml-auto shrink-0">
+              ${presentBtnHtml}
+              <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold bg-${c.color}-500/20 text-${c.color}-300 border border-${c.color}-500/30 shrink-0">${c.code}</span>
+            </div>
+          </div>
+        `);
+      });
+
+      container.innerHTML = items.join('');
+    }
+
+    function filterTimetableDay(dayFilter) {
+      state.ttDayFilter = dayFilter;
+      document.querySelectorAll('.tt-day-btn').forEach(btn => {
+        if (btn.dataset.dayfilter === dayFilter) {
+          btn.className = 'tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shrink-0';
+        } else {
+          btn.className = 'tt-day-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 shrink-0';
+        }
+      });
+      renderTimetableGrid();
+    }
+
+    function renderTimetableGrid() {
+      const tbody = document.getElementById('timetableGridBody');
+      const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+      const daysToShow = state.ttDayFilter === 'ALL' ? allDays : [state.ttDayFilter];
+
+      tbody.innerHTML = daysToShow.map(day => {
+        const cells = [];
+        for (let i = 0; i < 8; i++) {
+          if (i === 4) {
+            cells.push(`
+              <td class="py-3 px-2 text-center bg-amber-500/5 border-x border-slate-800/80 font-mono text-[11px] font-bold text-amber-300">
+                LUNCH
+              </td>
+            `);
+          }
+          const c = getSlotCourseForBranch(state.branch, day, i);
+          const isFree = c.code === 'Free';
+          cells.push(`
+            <td class="p-2 align-top">
+              <div class="p-2.5 rounded-xl h-full min-h-[74px] flex flex-col justify-between ${
+                isFree
+                  ? 'bg-slate-900/30 border border-dashed border-slate-800 text-slate-500'
+                  : `bg-${c.color}-500/10 border border-${c.color}-500/30`
+              }">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900/80 text-${c.color}-300">${c.code}</span>
+                </div>
+                <div class="my-1 font-bold text-white text-xs leading-snug">${c.name}</div>
+                <div class="text-[10px] text-slate-400 truncate">${c.faculty}</div>
+              </div>
+            </td>
+          `);
+        }
+
+        return `
+          <tr class="hover:bg-slate-900/40 transition">
+            <td class="py-3 px-4 font-bold text-white sticky left-0 bg-slate-900/95 z-10 border-r border-slate-800">${day}</td>
+            ${cells.join('')}
+          </tr>
+        `;
+      }).join('');
+
+      // Render Faculty Directory Cards
+      const facultyList = [
+        { sno: 1, faculty: 'Dr. Ramakrishna', subject: 'Linear Algebra & Matrix Analysis', slot: 'Slot F', venue: 'Room 135' },
+        { sno: 2, faculty: 'Dr. Mithilesh', subject: 'Calculus', slot: 'Slot N', venue: 'Room 135' },
+        { sno: 3, faculty: 'Prof. Srinivasa', subject: 'Programming with C & IT Workshop', slot: 'Slot M / G', venue: 'Room 135 & Comp Lab' },
+        { sno: 4, faculty: 'Dr. Lakhindar', subject: 'Digital Electronics using Verilog', slot: 'Slot B', venue: 'Room 135 & HW Lab' },
+        { sno: 5, faculty: 'Dr. Shubhangi', subject: 'Internet of Things (IoT)', slot: 'Slot C', venue: 'Room 135 & IoT Lab' },
+        { sno: 6, faculty: 'Dr. Aruna', subject: 'International Language Competency (ILC)', slot: 'Slot ILC', venue: 'Room 135' },
+        { sno: 7, faculty: 'Dr. Amit', subject: 'Entrepreneurship', slot: 'Slot A', venue: 'Room 135' },
+        { sno: 8, faculty: 'Dr. Darash', subject: 'Music', slot: 'Slot Music', venue: 'Music & Fine Arts Hall' },
+        { sno: 9, faculty: 'Guest Faculty', subject: 'Yoga & Universal Human Values', slot: 'Slot Yoga', venue: 'SAC / Multipurpose Hall' },
+        { sno: 10, faculty: 'Dr. Khilesh Kumar', subject: 'Sports & Physical Education', slot: 'Sports', venue: 'Sports Complex' }
+      ];
+
+      document.getElementById('facultyDirectoryGrid').innerHTML = facultyList.map(f => `
+        <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex items-start justify-between gap-3">
+          <div>
+            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${f.slot}</span>
+            <h4 class="text-sm font-bold text-white mt-2">${f.subject}</h4>
+            <p class="text-xs text-emerald-400 font-semibold mt-0.5"><i class="fa-solid fa-user-tie mr-1"></i>${f.faculty}</p>
+            <p class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>${f.venue}</p>
+          </div>
+          <span class="text-xs font-mono text-slate-500">#${f.sno}</span>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 7. YPT STUDY TRACKER, POMODORO, ATTENDANCE & TO-DO LOGIC
+    // =========================================================================
+
+    function switchStudySubTab(sub) {
+      ['ypt', 'pomodoro', 'attendance', 'todo'].forEach(k => {
+        document.getElementById(`study-sub-${k}`).classList.add('hidden');
+        document.getElementById(`subtab-btn-${k}`).className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-300 hover:bg-slate-800 transition';
+      });
+      document.getElementById(`study-sub-${sub}`).classList.remove('hidden');
+      document.getElementById(`subtab-btn-${sub}`).className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 transition';
+    }
+
+    function getTotalYptSeconds() {
+      return state.yptSubjects.reduce((acc, s) => acc + s.seconds, 0);
+    }
+
+    function renderYptTracker() {
+      const totalSecs = getTotalYptSeconds();
+      const formattedTotal = formatHMS(totalSecs);
+      const goalSecs = 6 * 3600;
+      const pct = Math.min(100, Math.round((totalSecs / goalSecs) * 100));
+
+      // Update Master Clocks & Badges
+      document.getElementById('yptMasterClock').textContent = formattedTotal;
+      document.getElementById('dashYptTotalDisplay').textContent = formattedTotal;
+      document.getElementById('sidebarYptBadge').textContent = formattedTotal;
+      document.getElementById('yptMasterPercent').textContent = `${pct}% of 6h daily goal`;
+      document.getElementById('yptMasterBar').style.width = `${pct}%`;
+      document.getElementById('dashYptProgressBar').style.width = `${pct}%`;
+
+      const activeSub = state.yptSubjects.find(s => s.id === state.yptActiveSubjectId) || state.yptSubjects[0];
+      document.getElementById('yptActiveCourseBanner').textContent = state.yptRunning
+        ? `🔥 Studying Now: ${activeSub.name}`
+        : `Selected Subject: ${activeSub.name}`;
+      document.getElementById('dashActiveSubjectLabel').textContent = `Active: ${activeSub.name}`;
+
+      // Update Play/Pause Buttons
+      const masterBtn = document.getElementById('yptMasterToggleBtn');
+      const dashBtn = document.getElementById('dashYptPlayBtn');
+      const dashBadge = document.getElementById('dashYptStatusBadge');
+
+      if (state.yptRunning) {
+        masterBtn.innerHTML = `<i class="fa-solid fa-pause"></i><span>Pause Study Session</span>`;
+        masterBtn.className = 'px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-amber-500/25 transition';
+        dashBtn.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+        dashBadge.textContent = 'Studying Live';
+        dashBadge.className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+      } else {
+        masterBtn.innerHTML = `<i class="fa-solid fa-play"></i><span>Start Studying</span>`;
+        masterBtn.className = 'px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/25 transition';
+        dashBtn.innerHTML = `<i class="fa-solid fa-play"></i>`;
+        dashBadge.textContent = 'Paused';
+        dashBadge.className = 'text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400';
+      }
+
+      // Render Subject Rows
+      document.getElementById('yptSubjectsList').innerHTML = state.yptSubjects.map(sub => {
+        const isCurrent = sub.id === state.yptActiveSubjectId;
+        const isRunningThis = isCurrent && state.yptRunning;
+        return `
+          <div class="p-3.5 rounded-xl ${isRunningThis ? 'bg-emerald-500/15 border border-emerald-500/40' : 'bg-slate-900/80 border border-slate-800'} flex items-center justify-between gap-3 transition">
+            <div class="flex items-center gap-3 min-w-0">
+              <button onclick="startSpecificYptSubject('${sub.id}')" class="w-9 h-9 rounded-xl ${
+                isRunningThis ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 hover:bg-emerald-500 text-slate-200 hover:text-slate-950'
+              } flex items-center justify-center font-bold transition shrink-0">
+                <i class="fa-solid ${isRunningThis ? 'fa-pause' : 'fa-play'} text-xs"></i>
+              </button>
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">${sub.name}</h4>
+                <p class="text-[11px] text-slate-400">${isRunningThis ? 'Recording live focus time...' : 'Tap play to focus'}</p>
+              </div>
+            </div>
+            <span class="font-mono text-sm font-bold ${isRunningThis ? 'text-emerald-300' : 'text-slate-200'} shrink-0">${formatHMS(sub.seconds)}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Render YPT Live Leaderboard (including User!)
+      const allRanked = [
+        ...YPT_PEERS.map(p => ({ ...p, total: p.baseSecs })),
+        {
+          name: `You (${state.branch} • IIIT-NR)`,
+          course: activeSub.name,
+          total: totalSecs,
+          studying: state.yptRunning,
+          isMe: true
+        }
+      ].sort((a, b) => b.total - a.total);
+
+      document.getElementById('yptLeaderboardList').innerHTML = allRanked.map((item, idx) => `
+        <div class="p-3 rounded-xl ${item.isMe ? 'bg-indigo-500/20 border border-indigo-500/40' : 'bg-slate-900/80 border border-slate-800'} flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-6 h-6 rounded-lg bg-slate-800 text-xs font-mono font-bold flex items-center justify-center text-slate-300 shrink-0">#${idx + 1}</span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full ${item.studying ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}"></span>
+                <h5 class="text-xs font-bold text-white truncate">${item.name}</h5>
+              </div>
+              <p class="text-[10px] text-slate-400 truncate">${item.studying ? 'Studying: ' + item.course : 'Resting / Break'}</p>
+            </div>
+          </div>
+          <span class="font-mono text-xs font-bold text-emerald-300 shrink-0">${formatHMS(item.total)}</span>
+        </div>
+      `).join('');
+    }
+
+    function toggleMasterYpt() {
+      state.yptRunning = !state.yptRunning;
+      renderYptTracker();
+    }
+
+    function quickToggleYptFromDash() {
+      toggleMasterYpt();
+      showToast(state.yptRunning ? 'YPT Study Timer Started!' : 'YPT Study Timer Paused');
+    }
+
+    function startSpecificYptSubject(subId) {
+      if (state.yptActiveSubjectId === subId) {
+        state.yptRunning = !state.yptRunning;
+      } else {
+        state.yptActiveSubjectId = subId;
+        state.yptRunning = true;
+      }
+      saveState();
+      renderYptTracker();
+    }
+
+    function logManualStudyTime() {
+      const activeSub = state.yptSubjects.find(s => s.id === state.yptActiveSubjectId) || state.yptSubjects[0];
+      if (activeSub) {
+        activeSub.seconds += 30 * 60;
+        saveState();
+        renderYptTracker();
+        showToast(`+30m added to ${activeSub.name}!`);
+      }
+    }
+
+    function resetYptToday() {
+      state.yptRunning = false;
+      state.yptSubjects.forEach(s => { s.seconds = 0; });
+      saveState();
+      renderYptTracker();
+      showToast('Reset today\'s YPT study timers to 00:00:00');
+    }
+
+    function addCustomYptSubject() {
+      const nextNum = state.yptSubjects.length + 1;
+      const newSub = {
+        id: 'sub-custom-' + Date.now(),
+        name: `Custom Study Topic #${nextNum} (${state.branch})`,
+        seconds: 0,
+        color: 'emerald'
+      };
+      state.yptSubjects.push(newSub);
+      state.yptActiveSubjectId = newSub.id;
+      saveState();
+      renderYptTracker();
+      showToast(`Added "${newSub.name}" to YPT Subjects!`);
+    }
+
+    // Pomodoro Timer Functions
+    function setPomodoroMode(mode, minutes) {
+      pomoState.running = false;
+      pomoState.mode = mode;
+      pomoState.totalSeconds = minutes * 60;
+      pomoState.remainingSeconds = minutes * 60;
+
+      ['focus', 'short', 'long', 'deep'].forEach(m => {
+        const btn = document.getElementById(`pomo-mode-${m}`);
+        if (btn) {
+          btn.className = (m === mode)
+            ? 'px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white'
+            : 'px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white';
+        }
+      });
+
+      const statusLabels = {
+        focus: 'Focus Session (25m) — Auto-credits YPT Study Time',
+        short: 'Short Break (5m) — Stretch & Hydrate',
+        long: 'Long Break (15m) — Walk / Canteen Tea Break',
+        deep: 'Deep Lab Session (50m) — Auto-credits YPT Study Time'
+      };
+      const statusEl = document.getElementById('pomodoroStatusText');
+      if (statusEl) statusEl.textContent = statusLabels[mode] || '';
+      updatePomodoroUI();
+    }
+
+    function togglePomodoro() {
+      pomoState.running = !pomoState.running;
+      updatePomodoroUI();
+    }
+
+    function resetPomodoro() {
+      pomoState.running = false;
+      pomoState.remainingSeconds = pomoState.totalSeconds;
+      updatePomodoroUI();
+    }
+
+    function updatePomodoroUI() {
+      const disp = document.getElementById('pomodoroTimeDisplay');
+      const btn = document.getElementById('pomodoroStartBtn');
+      if (!disp || !btn) return;
+
+      const mins = String(Math.floor(pomoState.remainingSeconds / 60)).padStart(2, '0');
+      const secs = String(pomoState.remainingSeconds % 60).padStart(2, '0');
+      disp.textContent = `${mins}:${secs}`;
+
+      if (pomoState.running) {
+        btn.innerHTML = `<i class="fa-solid fa-pause mr-1.5"></i> Pause Timer`;
+        btn.className = 'px-8 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/30 transition';
+      } else {
+        btn.innerHTML = `<i class="fa-solid fa-play mr-1.5"></i> Start Timer`;
+        btn.className = 'px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-600/30 transition';
+      }
+    }
+
+    // 75% Attendance Calculator & Subject-Wise Cloud History
+    function renderAttendanceTracker() {
+      const grid = document.getElementById('attendanceCardsGrid');
+      const dashMini = document.getElementById('dashAttendanceMiniList');
+      const historyEl = document.getElementById('attendanceHistoryLogList');
+
+      if (grid) {
+        grid.innerHTML = state.attendance.map((item, idx) => {
+          const pct = item.total > 0 ? Math.round((item.attended / item.total) * 100) : 100;
+          const isSafe = pct >= 75;
+
+          let adviceText = '';
+          if (isSafe) {
+            const canSkip = Math.floor((item.attended - 0.75 * item.total) / 0.75);
+            adviceText = canSkip > 0
+              ? `Safe! You can skip up to <b>${canSkip}</b> upcoming class(es).`
+              : `On the 75% border — attend next class!`;
+          } else {
+            const mustAttend = Math.ceil((0.75 * item.total - item.attended) / 0.25);
+            adviceText = `Short! Must attend next <b>${mustAttend}</b> class(es) in a row.`;
+          }
+
+          return `
+            <div class="glass-card rounded-2xl p-5 border ${isSafe ? 'border-slate-800' : 'border-rose-500/40'} space-y-3">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <h4 class="text-sm font-bold text-white">${item.name}</h4>
+                  <p class="text-xs text-slate-400">${item.faculty}</p>
+                </div>
+                <span class="px-2.5 py-1 rounded-xl font-mono text-sm font-extrabold ${
+                  isSafe ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                }">${pct}%</span>
+              </div>
+
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="h-full ${isSafe ? 'bg-emerald-500' : 'bg-rose-500'}" style="width: ${Math.min(100, pct)}%"></div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-300 font-mono">Attended: <b>${item.attended} / ${item.total} days</b></span>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="markAttendance(${idx}, true)" class="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold">+ Present</button>
+                  <button onclick="markAttendance(${idx}, false)" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold">+ Absent</button>
+                </div>
+              </div>
+
+              <p class="text-[11px] ${isSafe ? 'text-emerald-400' : 'text-rose-400'}">${adviceText}</p>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (dashMini) {
+        dashMini.innerHTML = state.attendance.slice(0, 6).map((item, idx) => {
+          const pct = item.total > 0 ? Math.round((item.attended / item.total) * 100) : 100;
+          const isSafe = pct >= 75;
+          return `
+            <div class="p-2.5 rounded-xl bg-slate-900/85 border border-slate-800 flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-white truncate">${item.name}</p>
+                <p class="text-[10px] font-mono text-slate-400">Attended: <b class="text-slate-200">${item.attended} / ${item.total} days</b></p>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span class="px-2 py-0.5 rounded-lg font-mono text-xs font-bold ${
+                  isSafe ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                }">${pct}%</span>
+                <button onclick="markAttendance(${idx}, true)" class="px-2 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 text-[10px] font-bold transition" title="Quick +1 Present">+1</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (historyEl) {
+        if (!state.attendanceLogs || state.attendanceLogs.length === 0) {
+          historyEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">No class attendance marked yet. Click "Mark Present" beside your ongoing class!</p>`;
+        } else {
+          historyEl.innerHTML = state.attendanceLogs.map(log => {
+            const isPres = log.status === 'present';
+            return `
+              <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-3 text-xs">
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${
+                      isPres ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'
+                    }">${isPres ? 'PRESENT' : 'ABSENT'}</span>
+                    <span class="font-bold text-white truncate">${log.subjectName}</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-0.5">${log.dayName} • ${log.slotLabel} • ${log.faculty}</p>
+                </div>
+                <span class="text-[11px] font-mono text-slate-400 shrink-0">${log.timestamp}</span>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    function markAttendance(idx, present) {
+      const item = state.attendance[idx];
+      item.total += 1;
+      if (present) item.attended += 1;
+
+      const nowStr = new Date().toLocaleString('en-IN', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
+      });
+      state.attendanceLogs.unshift({
+        key: `manual_${Date.now()}`,
+        dateStr: getTodayDateString(),
+        dayName: getDayName(new Date()),
+        slotIdx: 0,
+        slotLabel: 'Manual Log',
+        subjectCode: item.code || 'Slot',
+        subjectName: item.name,
+        faculty: item.faculty,
+        branch: state.branch,
+        studentName: state.studentProfile.name,
+        status: present ? 'present' : 'absent',
+        timestamp: nowStr
+      });
+
+      saveState();
+      renderAttendanceTracker();
+      updateLiveClockAndStatus();
+      showToast(`${present ? 'Marked Present' : 'Marked Absent'} in ${item.name} (${item.attended}/${item.total} days)`);
+    }
+
+    function resetAttendanceDemo() {
+      state.attendance = JSON.parse(JSON.stringify(DEFAULT_SUBJECT_ATTENDANCE));
+      state.attendanceLogs = [];
+      saveState();
+      renderAttendanceTracker();
+      updateLiveClockAndStatus();
+      renderDashboardSchedule(document.getElementById('dashDayQuickSelect').value);
+      showToast('Reset attendance counts to semester baseline');
+    }
+
+    // To-Do Tasks
+    function renderTodos() {
+      const dashContainer = document.getElementById('dashTodoList');
+      const fullContainer = document.getElementById('fullTodoContainer');
+
+      const html = state.todos.map(t => {
+        const prioColors = {
+          High: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+          Medium: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+          Low: 'bg-slate-800 text-slate-400 border-slate-700'
+        };
+        return `
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">
+            <label class="flex items-center gap-3 cursor-pointer min-w-0 flex-1">
+              <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTodo(${t.id})" class="w-4 h-4 rounded accent-emerald-500 shrink-0" />
+              <div class="min-w-0">
+                <p class="text-xs font-semibold ${t.done ? 'line-through text-slate-500' : 'text-white'} truncate">${t.title}</p>
+                <span class="text-[10px] text-slate-400">${t.course}</span>
+              </div>
+            </label>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${prioColors[t.priority] || prioColors.Medium}">${t.priority}</span>
+              <button onclick="deleteTodo(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      dashContainer.innerHTML = html || `<p class="text-xs text-slate-500 text-center py-4">All tasks completed!</p>`;
+      fullContainer.innerHTML = html || `<p class="text-xs text-slate-500 text-center py-4">No pending tasks. Add one above!</p>`;
+    }
+
+    function handleQuickAddTask(e) {
+      e.preventDefault();
+      const input = document.getElementById('dashQuickTaskInput');
+      if (!input.value.trim()) return;
+      state.todos.unshift({
+        id: Date.now(),
+        title: input.value.trim(),
+        course: `B.Tech ${state.branch}`,
+        priority: 'High',
+        done: false
+      });
+      input.value = '';
+      saveState();
+      renderTodos();
+      showToast('Task added to your checklist!');
+    }
+
+    function handleFullAddTask(e) {
+      e.preventDefault();
+      const title = document.getElementById('fullTaskTitle').value.trim();
+      const course = document.getElementById('fullTaskCourse').value;
+      const priority = document.getElementById('fullTaskPriority').value;
+      if (!title) return;
+      state.todos.unshift({ id: Date.now(), title, course, priority, done: false });
+      document.getElementById('fullTaskTitle').value = '';
+      saveState();
+      renderTodos();
+      showToast('Assignment added!');
+    }
+
+    function toggleTodo(id) {
+      const t = state.todos.find(x => x.id === id);
+      if (t) t.done = !t.done;
+      saveState();
+      renderTodos();
+    }
+
+    function deleteTodo(id) {
+      state.todos = state.todos.filter(x => x.id !== id);
+      saveState();
+      renderTodos();
+    }
+
+    // =========================================================================
+    // 8. MESS MENU & CANTEEN CALCULATOR
+    // =========================================================================
+
+    function switchFoodSubTab(sub) {
+      if (sub === 'messmenu') {
+        document.getElementById('food-sub-messmenu').classList.remove('hidden');
+        document.getElementById('food-sub-canteen').classList.add('hidden');
+        document.getElementById('food-btn-messmenu').className = 'px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition';
+        document.getElementById('food-btn-canteen').className = 'px-4 py-2 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition';
+      } else {
+        document.getElementById('food-sub-messmenu').classList.add('hidden');
+        document.getElementById('food-sub-canteen').classList.remove('hidden');
+        document.getElementById('food-btn-canteen').className = 'px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition';
+        document.getElementById('food-btn-messmenu').className = 'px-4 py-2 rounded-lg text-xs font-bold text-slate-300 hover:text-white transition';
+      }
+    }
+
+    function renderMessMenu(selectedDay) {
+      if (selectedDay) state.selectedMessDay = selectedDay;
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+      document.getElementById('messDayPills').innerHTML = days.map(d => `
+        <button onclick="renderMessMenu('${d}')" class="px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition ${
+          state.selectedMessDay === d
+            ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20'
+            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+        }">${d}</button>
+      `).join('');
+
+      const m = MESS_MENU[state.selectedMessDay];
+      const mealCards = [
+        { title: 'Breakfast', time: '07:30 AM – 09:00 AM', icon: 'fa-mug-hot', color: 'amber', items: m.Breakfast },
+        { title: 'Lunch', time: '12:30 PM – 02:15 PM', icon: 'fa-bowl-rice', color: 'emerald', items: m.Lunch },
+        { title: 'High Tea', time: '05:00 PM – 06:00 PM', icon: 'fa-cookie', color: 'cyan', items: m.HighTea },
+        { title: 'Dinner', time: '07:30 PM – 09:15 PM', icon: 'fa-utensils', color: 'indigo', items: m.Dinner }
+      ];
+
+      document.getElementById('messDayMealsGrid').innerHTML = mealCards.map(c => `
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between border border-${c.color}-500/30">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="px-2.5 py-1 rounded-lg bg-${c.color}-500/20 text-${c.color}-300 text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid ${c.icon}"></i> ${c.title}
+              </span>
+              <span class="text-[11px] font-mono text-slate-400">${state.selectedMessDay}</span>
+            </div>
+            <p class="text-xs text-slate-200 leading-relaxed">${c.items}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 font-mono">
+            <i class="fa-regular fa-clock mr-1"></i>${c.time}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderCanteenMenu() {
+      const q = (document.getElementById('canteenSearchInput')?.value || '').toLowerCase();
+      const cat = document.getElementById('canteenCategorySelect')?.value || 'ALL';
+
+      const filtered = CANTEEN_ITEMS.filter(item => {
+        const matchQ = item.name.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+        const matchCat = cat === 'ALL' || item.category === cat;
+        return matchQ && matchCat;
+      });
+
+      document.getElementById('canteenItemsGrid').innerHTML = filtered.map(item => {
+        const inCartQty = state.canteenCart[item.id] || 0;
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-900/85 border border-slate-800 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <span class="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">${item.category} • ${item.qty}</span>
+              <h4 class="text-xs font-bold text-white truncate mt-0.5">${item.name}</h4>
+              <p class="text-sm font-mono font-extrabold text-emerald-400 mt-0.5">₹${item.price}</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              ${
+                inCartQty > 0
+                  ? `<button onclick="removeFromCanteenCart('${item.id}')" class="w-7 h-7 rounded-lg bg-slate-800 text-white font-bold text-xs">-</button>
+                     <span class="font-mono text-xs font-bold text-white w-4 text-center">${inCartQty}</span>
+                     <button onclick="addToCanteenCart('${item.id}')" class="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs">+</button>`
+                  : `<button onclick="addToCanteenCart('${item.id}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-amber-500 text-slate-200 hover:text-slate-950 font-bold text-xs transition">+ Add</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      renderCanteenCart();
+    }
+
+    function addToCanteenCart(id) {
+      state.canteenCart[id] = (state.canteenCart[id] || 0) + 1;
+      renderCanteenMenu();
+    }
+
+    function removeFromCanteenCart(id) {
+      if (!state.canteenCart[id]) return;
+      state.canteenCart[id] -= 1;
+      if (state.canteenCart[id] <= 0) delete state.canteenCart[id];
+      renderCanteenMenu();
+    }
+
+    function clearCanteenCart() {
+      state.canteenCart = {};
+      renderCanteenMenu();
+    }
+
+    function adjustSplitCount(delta) {
+      state.canteenSplit = Math.max(1, state.canteenSplit + delta);
+      renderCanteenCart();
+    }
+
+    function renderCanteenCart() {
+      const cartEl = document.getElementById('canteenCartList');
+      const keys = Object.keys(state.canteenCart);
+      let total = 0;
+
+      if (keys.length === 0) {
+        cartEl.innerHTML = `<p class="text-xs text-slate-500 text-center py-6">Tap "+ Add" on any canteen item to calculate your bill.</p>`;
+      } else {
+        cartEl.innerHTML = keys.map(id => {
+          const item = CANTEEN_ITEMS.find(x => x.id === id);
+          const qty = state.canteenCart[id];
+          const sub = item.price * qty;
+          total += sub;
+          return `
+            <div class="flex items-center justify-between text-xs bg-slate-900/90 px-3 py-2 rounded-xl border border-slate-800">
+              <div class="min-w-0 pr-2">
+                <p class="font-semibold text-white truncate">${item.name}</p>
+                <span class="text-[10px] text-slate-400">₹${item.price} × ${qty}</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="font-mono font-bold text-amber-300">₹${sub}</span>
+                <button onclick="removeFromCanteenCart('${id}')" class="text-slate-500 hover:text-rose-400"><i class="fa-solid fa-circle-minus"></i></button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('canteenTotalAmount').textContent = `₹${total}`;
+      document.getElementById('canteenSplitCount').textContent = state.canteenSplit;
+      document.getElementById('canteenSplitPerPerson').textContent = `₹${Math.ceil(total / state.canteenSplit)}`;
+    }
+
+    // =========================================================================
+    // 9. BUS STAND, ACADEMIC CALENDAR & STUDENT HOSTEL DIRECTORY
+    // =========================================================================
+
+    function renderNextBusWidget(h, m) {
+      const nowMins = h * 60 + m;
+      const nextOut = BUS_ROUTES.outbound.find(b => (b.h * 60 + b.m) >= nowMins) || BUS_ROUTES.outbound[0];
+      const nextIn = BUS_ROUTES.inbound.find(b => (b.h * 60 + b.m) >= nowMins) || BUS_ROUTES.inbound[0];
+
+      document.getElementById('dashNextBusBox').innerHTML = `
+        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold uppercase text-rose-400">To Raipur Railway Stn</span>
+            <p class="text-xs font-bold text-white mt-0.5">${nextOut.via}</p>
+          </div>
+          <span class="font-mono text-sm font-extrabold text-rose-300 shrink-0">${nextOut.time}</span>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold uppercase text-indigo-400">From Railway Stn → Campus</span>
+            <p class="text-xs font-bold text-white mt-0.5">${nextIn.via}</p>
+          </div>
+          <span class="font-mono text-sm font-extrabold text-indigo-300 shrink-0">${nextIn.time}</span>
+        </div>
+      `;
+
+      // Full Bus Tab Lists
+      document.getElementById('busOutboundList').innerHTML = BUS_ROUTES.outbound.map(b => `
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-extrabold text-rose-300">${b.time}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold">${b.route}</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-1">${b.via}</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-emerald-400 shrink-0">${b.fare}</span>
+        </div>
+      `).join('');
+
+      document.getElementById('busInboundList').innerHTML = BUS_ROUTES.inbound.map(b => `
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-extrabold text-indigo-300">${b.time}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold">${b.route}</span>
+            </div>
+            <p class="text-xs text-slate-300 mt-1">${b.via}</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-emerald-400 shrink-0">${b.fare}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderAcademicCalendar() {
+      document.getElementById('academicEventsTimeline').innerHTML = ACADEMIC_EVENTS.map(ev => {
+        const badgeStyle = ev.tag === 'Active Now'
+          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+          : ev.tag === 'Critical' || ev.tag === 'Exam'
+          ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+          : 'bg-slate-800 text-slate-400 border-slate-700';
+
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-3">
+            <div>
+              <h4 class="text-xs font-bold text-white">${ev.event}</h4>
+              <p class="text-xs font-mono text-indigo-300 mt-0.5">${ev.date}</p>
+            </div>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full border shrink-0 ${badgeStyle}">${ev.tag}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('holidaysListContainer').innerHTML = OFFICIAL_HOLIDAYS.map(h => `
+        <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="font-mono text-slate-500">#${h.sno}</span>
+            <div>
+              <h5 class="font-bold text-white">${h.name}</h5>
+              <span class="text-[11px] text-slate-400">${h.day}</span>
+            </div>
+          </div>
+          <span class="font-mono font-semibold text-amber-300 shrink-0">${h.date}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderStudentDirectory() {
+      const q = (document.getElementById('studentSearchInput')?.value || '').toLowerCase();
+      const br = document.getElementById('studentBranchFilter')?.value || 'ALL';
+      const fl = document.getElementById('studentFloorFilter')?.value || 'ALL';
+
+      const filtered = STUDENT_DIRECTORY.filter(st => {
+        const matchQ = st.name.toLowerCase().includes(q) || st.room.toLowerCase().includes(q) || st.roll.toLowerCase().includes(q);
+        const matchBr = br === 'ALL' || st.branch === br;
+        const matchFl = fl === 'ALL' || st.room.startsWith(fl);
+        return matchQ && matchBr && matchFl;
+      });
+
+      document.getElementById('studentDirectoryCount').textContent = `Showing ${filtered.length} verified student records (Raman Hostel & Batch 2026–30)`;
+
+      const branchBadge = {
+        DSAI: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+        CSE: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+        ECE: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+      };
+
+      document.getElementById('studentDirectoryGrid').innerHTML = filtered.map(st => `
+        <div class="p-4 rounded-2xl bg-slate-900/85 border border-slate-800 flex items-center justify-between gap-3 hover:border-teal-500/40 transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-xl bg-slate-800 text-teal-300 font-bold text-sm flex items-center justify-center shrink-0">
+              ${st.name.slice(0, 2)}
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-xs font-bold text-white truncate">${st.name}</h4>
+              <p class="text-[11px] font-mono text-slate-400 mt-0.5">Roll: ${st.roll}</p>
+            </div>
+          </div>
+          <div class="text-right shrink-0 space-y-1">
+            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded border ${branchBadge[st.branch]}">${st.branch}</span>
+            <div class="text-xs font-mono font-bold text-teal-300"><i class="fa-solid fa-door-open mr-1"></i>Rm ${st.room}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 10. NOTIFICATIONS & CUSTOM MODAL
+    // =========================================================================
+
+    function toggleNotificationDrawer() {
+      const dr = document.getElementById('notificationDrawer');
+      dr.classList.toggle('translate-x-full');
+      renderNotifications();
+    }
+
+    function renderNotifications() {
+      document.getElementById('notifBadgeCount').textContent = state.notifications.length;
+      document.getElementById('notificationList').innerHTML = state.notifications.map(n => `
+        <div class="p-3.5 rounded-xl bg-slate-800/90 border border-slate-700/80 space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-bold uppercase text-indigo-400">${n.time}</span>
+            <button onclick="dismissNotif(${n.id})" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <h4 class="text-xs font-bold text-white">${n.title}</h4>
+          <p class="text-xs text-slate-300 leading-relaxed">${n.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function dismissNotif(id) {
+      state.notifications = state.notifications.filter(n => n.id !== id);
+      saveState();
+      renderNotifications();
+    }
+
+    function openReminderModal() {
+      document.getElementById('modalTitle').textContent = 'Add Custom Class Slot / Campus Reminder';
+      document.getElementById('customModalBackdrop').classList.remove('hidden');
+      document.getElementById('customModalBackdrop').classList.add('flex');
+    }
+
+    function openCustomSlotModal() {
+      openReminderModal();
+    }
+
+    function closeModal() {
+      document.getElementById('customModalBackdrop').classList.add('hidden');
+      document.getElementById('customModalBackdrop').classList.remove('flex');
+    }
+
+    function handleModalSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('modalInputTitle').value.trim();
+      const day = document.getElementById('modalInputDay').value;
+      const slotIdx = document.getElementById('modalInputSlot').value;
+      if (!title) return;
+
+      // Save to custom timetable slot & notifications
+      state.customSlots[`${state.branch}_${day}_${slotIdx}`] = title;
+      state.notifications.unshift({
+        id: Date.now(),
+        title: `Custom Slot Added (${day})`,
+        desc: `${title} scheduled at ${TIME_SLOTS[slotIdx].label}`,
+        time: 'Custom Alert',
+        type: 'info'
+      });
+
+      document.getElementById('modalInputTitle').value = '';
+      saveState();
+      closeModal();
+      renderTimetableGrid();
+      renderDashboardSchedule(document.getElementById('dashDayQuickSelect').value);
+      renderNotifications();
+      showToast('Saved custom slot & notification!');
+    }
+
+    // =========================================================================
+    // 11. INITIALIZATION & MASTER INTERVAL LOOP
+    // =========================================================================
+
+    window.onload = function () {
+      const now = new Date();
+      const todayName = getDayName(now);
+      const initialSchedDay = (todayName === 'Saturday' || todayName === 'Sunday') ? 'Monday' : todayName;
+
+      document.getElementById('dashDayQuickSelect').value = initialSchedDay;
+      state.selectedMessDay = todayName;
+
+      updateStudentHeaderUI();
+      changeBranch(state.branch);
+      renderDashboardSchedule(initialSchedDay);
+      renderTimetableGrid();
+      renderYptTracker();
+      updatePomodoroUI();
+      renderAttendanceTracker();
+      renderTodos();
+      renderMessMenu(todayName);
+      renderCanteenMenu();
+      renderAcademicCalendar();
+      renderStudentDirectory();
+      renderNotifications();
+      updateLiveClockAndStatus();
+
+      // 1-Second Master Loop for YPT Stopwatch, Pomodoro, and Live Campus Clock
+      setInterval(() => {
+        updateLiveClockAndStatus();
+
+        // Increment YPT Timer if running
+        if (state.yptRunning) {
+          const activeSub = state.yptSubjects.find(s => s.id === state.yptActiveSubjectId) || state.yptSubjects[0];
+          activeSub.seconds += 1;
+          if (activeSub.seconds % 10 === 0) saveState();
+          renderYptTracker();
+        }
+
+        // Decrement Pomodoro if running
+        if (pomoState.running) {
+          if (pomoState.remainingSeconds > 0) {
+            pomoState.remainingSeconds -= 1;
+            if (pomoState.mode === 'focus' || pomoState.mode === 'deep') {
+              const activeSub = state.yptSubjects.find(s => s.id === state.yptActiveSubjectId) || state.yptSubjects[0];
+              activeSub.seconds += 1;
+            }
+            updatePomodoroUI();
+          } else {
+            pomoState.running = false;
+            playBeep();
+            saveState();
+            renderYptTracker();
+            updatePomodoroUI();
+            showToast('Pomodoro Session Complete! Time logged to YPT.', 'fa-bell');
+          }
+        }
+      }, 1000);
+    };
+  </script>
+
+  <!-- ======================= FIREBASE AUTH & FIRESTORE BACKEND MODULE ======================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'iiitnr-pulse-2026';
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let isApplyingRemoteUpdate = false;
+
+    async function initFirebaseBackend() {
+      try {
+        if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+          document.getElementById('loginFirebaseUidText').textContent = 'Local Session Ready';
+          return;
+        }
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        // RULE 3: Authenticate FIRST before any Firestore query
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        onAuthStateChanged(auth, (user) => {
+          currentUser = user;
+          if (!user) return;
+          const uidEl = document.getElementById('loginFirebaseUidText');
+          if (uidEl) uidEl.textContent = user.uid;
+
+          // RULE 1: Strict Path /artifacts/{appId}/users/{userId}/studentData/main
+          const studentDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'studentData', 'main');
+
+          onSnapshot(
+            studentDocRef,
+            (snap) => {
+              if (snap.exists()) {
+                const data = snap.data();
+                isApplyingRemoteUpdate = true;
+                if (data.studentProfile) {
+                  state.studentProfile = data.studentProfile;
+                  state.branch = data.studentProfile.branch || state.branch;
+                }
+                if (data.attendanceJSON) {
+                  try { state.attendance = JSON.parse(data.attendanceJSON); } catch (e) {}
+                }
+                if (data.attendanceLogsJSON) {
+                  try { state.attendanceLogs = JSON.parse(data.attendanceLogsJSON); } catch (e) {}
+                }
+                if (data.yptSubjectsJSON) {
+                  try { state.yptSubjects = JSON.parse(data.yptSubjectsJSON); } catch (e) {}
+                }
+                if (data.todosJSON) {
+                  try { state.todos = JSON.parse(data.todosJSON); } catch (e) {}
+                }
+                if (data.customSlotsJSON) {
+                  try { state.customSlots = JSON.parse(data.customSlotsJSON); } catch (e) {}
+                }
+
+                updateStudentHeaderUI();
+                changeBranch(state.branch);
+                renderAttendanceTracker();
+                renderYptTracker();
+                renderTodos();
+                updateLiveClockAndStatus();
+                isApplyingRemoteUpdate = false;
+              } else {
+                // First time student opens app -> prompt login modal & create initial cloud doc
+                openStudentLoginModal();
+                window.syncStateToFirebase();
+              }
+            },
+            (err) => {
+              console.warn('Firestore snapshot error:', err);
+            }
+          );
+        });
+      } catch (err) {
+        console.warn('Firebase initialization warning:', err);
+      }
+    }
+
+    window.syncStateToFirebase = async function () {
+      if (!db || !currentUser || isApplyingRemoteUpdate) return;
+      try {
+        const studentDocRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'studentData', 'main');
+        await setDoc(studentDocRef, {
+          studentProfile: state.studentProfile,
+          branch: state.branch,
+          attendanceJSON: JSON.stringify(state.attendance),
+          attendanceLogsJSON: JSON.stringify(state.attendanceLogs.slice(0, 80)),
+          yptSubjectsJSON: JSON.stringify(state.yptSubjects),
+          todosJSON: JSON.stringify(state.todos),
+          customSlotsJSON: JSON.stringify(state.customSlots),
+          updatedAt: Date.now()
+        }, { merge: true });
+      } catch (e) {
+        console.warn('Cloud sync error:', e);
+      }
+    };
+
+    initFirebaseBackend();
+  </script>
+</body>
+</html>
